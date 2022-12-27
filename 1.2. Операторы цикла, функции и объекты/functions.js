@@ -1,6 +1,6 @@
 function cycles(){
-	let user_response = Number(prompt('Pleas insert the integer more then zero: '))
-	console.log(user_response)
+	let user_response = prompt('Pleas insert the integer more then zero: ')
+	user_response = Number(user_response)
 	
 	if (
 		user_response > 0 == true
@@ -26,6 +26,6 @@ function cycles(){
 }
 
 $( document ).ready( function(){
-	cycles()
+	console.log(cycles())
 	
 } )
