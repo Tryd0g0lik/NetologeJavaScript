@@ -1,6 +1,6 @@
 
 import { Good } from "./goodJS";
-const f = require( './root.json');
+const f = require( './root.txt');
 
 class GoodsList extends Good{
 
@@ -38,7 +38,7 @@ class GoodsList extends Good{
 
 
     getProducts(): void {
-         return require('./root.json',)
+         return require('./root.txt',)
     }
 
     protected getProductsJson(): any {
@@ -100,3 +100,4 @@ class GoodsList extends Good{
         }
     }
 }
+
