@@ -12,31 +12,33 @@ class GoodsList extends good.Good {
         this.sortDir = sortDirs;
         this.__lenResponse = null;
 
-        const { open } = require('fs/promises');
-        this.dbReadTheData = (
-            () => {
-                return ((async (path) => {
-                    try {
-                        // console.log(`path: ${path}`)
-                        const fd = await open(path)
+        this.dbReadTheData = () => {
 
-                        for await (let __result of fd.createReadStream({start: 0,})) {
+            // return ((async (path) => {
+            //     const { open } = require('fs/promises');
+            //     try {
+            //         // console.log(`path: ${path}`)
+            //         const fd = await open(path)
+            //
+            //         for await (let __result of fd.createReadStream({start: 0,})) {
+            //
+            //             `__result: ${__result}`
+            //
+            //         }
+            //
+            //         await fd.close();
+            //         return Object(__result)
+            //         // rejects('What happened?')
+            //
+            //     } catch (error) {
+            //         console.error('there was an error:', error.message);
+            //     }
+            //     // console.log(`__result: ${__result}`)
+            //
+            //     })('./root.txt'));
 
-                            console.log(`__result: ${__result}`)
 
-                        }
-
-                        await fd.close();
-                        return Object(__result)
-                        // rejects('What happened?')
-
-                    } catch (error) {
-                        console.error('there was an error:', error.message);
-                    }
-                    // console.log(`__result: ${__result}`)
-
-                })('./root.txt'));
-            });
+        };
     }
     dbReadTheDataJson()
         {
@@ -48,14 +50,15 @@ class GoodsList extends good.Good {
         }
 
     setProducts(){
+        let f = this.dbReadTheData
+        console.log(
+            f()
+        )
         // let __response = await (this.dbReadTheData);
-        let __g = Object(async () => {
-            this.dbReadTheData.then()
-        })
 
-        for (const s of  async () => this.dbReadTheData) {
-            console.log(`dbReadTheData: ${s}`)
-        }
+        // for (const s of  () => this.dbReadTheData) {
+        //     console.log(`dbReadTheData: ${s}`)
+        // }
         let __newVar = JSON.stringify(this.dbReadTheData);
         console.log("))))" + (__newVar))
         let products = {
