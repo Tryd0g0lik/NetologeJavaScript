@@ -1,8 +1,8 @@
 function cycles(){
+
 	let number = prompt ('Insert a number: ')
 	let user_response = Number(number) //require('Please insert the integer more then zero: ')
 
-	// user_response = Number(user_response)
 	
 	if (
 		user_response > 0 == true
@@ -18,6 +18,7 @@ function cycles(){
 			}
 			
 			if (_lists.length === 2){
+
 				return alert("Ta-daa: " + user_response + " It's integer")
 			}
 			
@@ -26,10 +27,3 @@ function cycles(){
 		
 	alert('ERROR!')
 }
-/* 
-$( document ).ready( function(){
-	console.log(cycles())
-	
-} )
-*/
-// console.log(cycles())
