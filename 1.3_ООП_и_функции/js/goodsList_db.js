@@ -1,90 +1,57 @@
 // import { Good } from "../goodJS";
 const good = require("./goodJS");
-const {resolve} = require("dns/promises");
-const {rejects} = require("assert");
+//const {readDbFile} = require("./js/function.js");
+const readDbFile = require("./functions").readDbFile;
 // const open = require("fs/promises");
 // const {open} = require("fs/promises");
 
 // const {open} = require("fs/promises");
-// const f = require('../root.txt');
+// const f = require('../root.json');
 // import * as fs from 'fs';
-// const f = fs.readFileSync('../root.txt')
+// const f = fs.readFileSync('../root.json')
 
 
 
 
-class GoodsList extends good.Good {
+class GoodsList extends good.Good{
     constructor(id, names, descriptions, sizes = 0, prices = 0, availble, filter, sortPrices = false, sortDirs = false) {
         super(id, names, descriptions, sizes, prices, availble);
         this.filter = filter;
         this.sortPrice = sortPrices;
         this.sortDir = sortDirs;
         this.__lenResponse = null;
+			}
 
-        const { open } = require('fs/promises');
-        this.dbReadTheData = (
-            () => {
-                return ((async (path) => {
-                    try {
-                        // console.log(`path: ${path}`)
-                        const fd = await open(path)
-
-                        for await (let __result of fd.createReadStream({start: 0,})) {
-
-                            console.log(`__result: ${__result}`)
-
-                        }
-
-                        await fd.close();
-                        return Object(__result)
-                        // rejects('What happened?')
-
-                    } catch (error) {
-                        console.error('there was an error:', error.message);
-                    }
-                    // console.log(`__result: ${__result}`)
-
-                })('./root.txt'));
-            });
-    }
-    dbReadTheDataJson()
-        {
-        let __response = this.dbReadTheData;
-
-        console.log(`_JSON.stringify(__response): ${JSON.stringify(__response)}`)
-
-        return JSON.stringify(__response)
-        }
-
-    setProducts(){
+	 setProducts(){
         // let __response = await (this.dbReadTheData);
-        let __g = Object(async () => {
-            this.dbReadTheData.then()
-        })
-
-        for (const s of  async () => this.dbReadTheData) {
-            console.log(`dbReadTheData: ${s}`)
-        }
-        let __newVar = JSON.stringify(this.dbReadTheData);
-        console.log("))))" + (__newVar))
-        let products = {
-            id: __newVar.length,
-            name: this.name,
-            descriptions: this.description,
-            sizes: this.size,
-            prices: this.price,
-            avaibles: this.availble,
-            filter: this.filter,
-            sortPrices: this.sortPrice,
-            sortDirs: this.sortDir,
-        };
-        let __oldData = JSON.stringify(__newVar)
-        let __newData = JSON.stringify(products)
-        const addedInDbResponse = ( __oldData + (__newData));
-        console.log('products: ' + addedInDbResponse)
-
-        // console.log(typeof JSON.parse(products) + "___" + JSON.parse(products))
-        return addedInDbResponse
+        // let __g = Object(async () => {
+        //     this.dbReadTheData.then()
+        // })
+        let f = readDbFile
+        console.log(`readDbFile: ${f()}`)
+        // for (const s of  async () => this.dbReadTheData) {
+        //     console.log(`dbReadTheData: ${s}`)
+        // }
+        // let __newVar = JSON.stringify(readDbFile());
+        // console.log("))))" + (__newVar))
+        // let products = {
+        //     id: __newVar.length,
+        //     name: this.name,
+        //     descriptions: this.description,
+        //     sizes: this.size,
+        //     prices: this.price,
+        //     avaibles: this.availble,
+        //     filter: this.filter,
+        //     sortPrices: this.sortPrice,
+        //     sortDirs: this.sortDir,
+        // };
+        // let __oldData = JSON.stringify(__newVar)
+        // let __newData = JSON.stringify(products)
+        // const addedInDbResponse = ( __oldData + (__newData));
+        // console.log('products: ' + addedInDbResponse)
+        //
+        // // console.log(typeof JSON.parse(products) + "___" + JSON.parse(products))
+        // return addedInDbResponse
         // вызываем список товаров и подаем в
         // _generatingId, для формирования id
     }
