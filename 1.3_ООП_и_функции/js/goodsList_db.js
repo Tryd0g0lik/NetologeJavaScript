@@ -1,16 +1,7 @@
-// import { Good } from "../goodJS";
+
 const good = require("./goodJS");
 const {resolve} = require("dns/promises");
 const {rejects} = require("assert");
-// const open = require("fs/promises");
-// const {open} = require("fs/promises");
-
-// const {open} = require("fs/promises");
-// const f = require('../root.txt');
-// import * as fs from 'fs';
-// const f = fs.readFileSync('../root.txt')
-
-
 
 
 class GoodsList extends good.Good {
