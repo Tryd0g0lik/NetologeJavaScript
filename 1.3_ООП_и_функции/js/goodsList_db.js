@@ -1,68 +1,71 @@
 
-const good = require("./goodJS");
-const {resolve} = require("dns/promises");
-const {rejects} = require("assert");
+const {len} = require("./functions")
+// import Good from "./js/goodJS.js";
+// const good = require("D:\\django-sites\\NetologeJavaScript\\1.3_ООП_и_функции\\js\\goodJS.js");
+// const {resolve} = require("dns/promises");
+// const {rejects} = require("assert");
+// const {Good} = require("./js/goodJS.js");
+let d = {"products": [
+    {
+      "id": 0,
+      "name": "Торт",
+      "descriptions": "ля-ля-ля Тортище",
+      "sizes": 100,
+      "prices": 12,
+      "avaibles": false,
+      "filter": " ",
+      "sortPrices": false,
+      "sortDirs": false
+    }
+  ]
+}
+class Good {
+    constructor(id = 0, names, descriptions, sizes = 0, prices = 0, availbles = false) {
+        this.id = id;
+        this.name = names;
+        this.description = descriptions;
+        this.size = sizes;
+        this.price = prices;
+        this.availble = availbles;
+    }
+}
 
-
-class GoodsList extends good.Good {
-    constructor(id, names, descriptions, sizes = 0, prices = 0, availble, filter, sortPrices = false, sortDirs = false) {
+class GoodsList extends Good {
+    constructor(id=0, names, descriptions, sizes = 0, prices = 0, availble, filter, sortPrices = false, sortDirs = false) {
         super(id, names, descriptions, sizes, prices, availble);
+
         this.filter = filter;
         this.sortPrice = sortPrices;
         this.sortDir = sortDirs;
         this.__lenResponse = null;
 
-        this.dbReadTheData = () => {
 
-            // return ((async (path) => {
-            //     const { open } = require('fs/promises');
-            //     try {
-            //         // console.log(`path: ${path}`)
-            //         const fd = await open(path)
-            //
-            //         for await (let __result of fd.createReadStream({start: 0,})) {
-            //
-            //             `__result: ${__result}`
-            //
-            //         }
-            //
-            //         await fd.close();
-            //         return Object(__result)
-            //         // rejects('What happened?')
-            //
-            //     } catch (error) {
-            //         console.error('there was an error:', error.message);
-            //     }
-            //     // console.log(`__result: ${__result}`)
-            //
-            //     })('./root.txt'));
-
-
-        };
     }
-    dbReadTheDataJson()
-        {
-        let __response = this.dbReadTheData;
 
-        console.log(`_JSON.stringify(__response): ${JSON.stringify(__response)}`)
+    getFile(loader= d){
+        return JSON.stringify(loader)
+        }
 
-        return JSON.stringify(__response)
+    dbReadTheDataJson(){
+        let __response = this.getFile();
+        return JSON.parse(__response)
         }
 
     setProducts(){
-        let f = this.dbReadTheData
-        console.log(
-            f()
-        )
-        // let __response = await (this.dbReadTheData);
+        let f = this.dbReadTheDataJson()
+        let len = f['products'].length
+        let __i = 0;
 
-        // for (const s of  () => this.dbReadTheData) {
-        //     console.log(`dbReadTheData: ${s}`)
-        // }
-        let __newVar = JSON.stringify(this.dbReadTheData);
-        console.log("))))" + (__newVar))
-        let products = {
-            id: __newVar.length,
+        for (let elem in f['products'] ){
+            if (f['products'][__i]['id'] === len)
+                return "Rewrite the 'id'"
+            __i++
+
+        }
+
+
+        let __newData = {
+            id: len,
             name: this.name,
             descriptions: this.description,
             sizes: this.size,
@@ -72,15 +75,15 @@ class GoodsList extends good.Good {
             sortPrices: this.sortPrice,
             sortDirs: this.sortDir,
         };
-        let __oldData = JSON.stringify(__newVar)
-        let __newData = JSON.stringify(products)
-        const addedInDbResponse = ( __oldData + (__newData));
-        console.log('products: ' + addedInDbResponse)
 
-        // console.log(typeof JSON.parse(products) + "___" + JSON.parse(products))
-        return addedInDbResponse
-        // вызываем список товаров и подаем в
-        // _generatingId, для формирования id
+        try {
+            f['products'].push(__newData)
+
+            return f
+        } catch (e) {
+            console.log("ERROR:" + e.message)
+            return
+        }
     }
 
     findProducts(view) {
@@ -114,10 +117,9 @@ class GoodsList extends good.Good {
 }
 
 
-const prods = new GoodsList(
-    1, 'Пирожок', 'LA-LA-LA-LA', 1050, 1355, false, ' ',false, false
+const prods = new GoodsList(names='Пирожок', descriptions ='LA-LA-LA-LA',
+    size=1050, price=1355, avaible=false,
+    filter=' ',sortPrices = false, sortDirs= false
 )
-// console.log(prods.setAvailable(true, 0))
-// console.log("dbReadTheData: " + prods.dbReadTheData)
-// console.log("dbReadTheDataJson: " + prods.dbReadTheDataJson())
-console.log("setProducts: " + prods.setProducts())
+// console.log( prods.getFile(d))
+console.log( `dbReadTheDataJson: ${JSON.stringify(prods.setProducts())}`)

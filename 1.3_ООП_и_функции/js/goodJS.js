@@ -6,7 +6,7 @@
 //     price: number;
 //     availble: boolean;
 // }
-class Good {
+export class Good {
     constructor(id = 0, names, descriptions, sizes = 0, prices = 0, availbles = false) {
         this.id = id;
         this.name = names;
@@ -16,5 +16,5 @@ class Good {
         this.availble = availbles;
     }
 }
-// export { Good, };
-module.exports = { Good, };
+// export {Good,};
+// module.exports = { Good, };
