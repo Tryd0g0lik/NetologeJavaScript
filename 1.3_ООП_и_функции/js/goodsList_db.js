@@ -19,6 +19,7 @@ let d = {"products": [
     }
   ]
 }
+
 class Good {
     constructor(id = 0, names, descriptions, sizes = 0, prices = 0, availbles = false) {
         this.id = id;
@@ -51,7 +52,7 @@ class GoodsList extends Good {
         return JSON.parse(__response)
         }
 
-    setProducts(){
+    setProducts(__newData = null){
         let f = this.dbReadTheDataJson()
         let len = f['products'].length
         let __i = 0;
@@ -63,8 +64,7 @@ class GoodsList extends Good {
 
         }
 
-
-        let __newData = {
+        __newData = {
             id: len,
             name: this.name,
             descriptions: this.description,
@@ -78,48 +78,91 @@ class GoodsList extends Good {
 
         try {
             f['products'].push(__newData)
-
             return f
+
         } catch (e) {
-            console.log("ERROR:" + e.message)
-            return
+            let err = ("ERROR:" + e.message)
+            return err
         }
     }
 
-    findProducts(view) {
-        let __elem;
-        let __response = this.dbReadTheDataJson();
-        // try {
-        // console.log('__response: ' + __response)
-        // for (let __i = 0; __i < (__response[products]).length; ++__i) {
-        //     try {
-        //         if (view === JSON.stringify(__response[products][__i])['id'] ||
-        //             view === JSON.stringify(__response[products][__i])['name']) {
-        //             __elem = JSON.stringify(__response[products][__i]);
-        //             return String(__elem);
-        //         }
-        //     } catch (err) {
-        //         continue;
-        //     }
-        // }
-        return "Not found";
+    findProducts(id=null, name=null) {
+        let __f = this.setProducts(null)
+        let __i = 0;
+        // let reg = /^\d*/
+        // str.search(reg) или str.test(reg)
+        // if (atrName.test(reg) === -1) {...}
+        //               ^
+        // TypeError: atrName.test is not a function
 
-        // } catch(err) {
-        //     return "Product is undefined";
-        // }
+        try {
+            if (id != null && name == null) {
+                for (let __el of (Array(__f['products'])[__i])) {
+                    if (__el.id === id) {
+                        return (__el)
+                    }
+                    __i++
+                }
+            } else if (name != null && id == null) {
+                for (let __el of (Array(__f['products'])[__i])) {
+                    if (__el.name === name) {
+                        return (__el)
+                    }
+                    __i++
+                }
+            }
+        }catch (e) {
+            let __err = `Error: massage ${e.message}`
+            return __err
+        }
+
 
     }
-    setAvailable(value, index, name) {
-        for (let __elenValues in [Number(index), String(name)]) {
-            return this.findProducts(__elenValues);
+    setAvailable(valueBoolen=false, indexNumber=null, nameStr=null) {
+        let  __response = null;
+        let findProducts = this.findProducts
+        try {
+
+
+            if (Number(indexNumber) != null && nameStr == null) {
+                __response = ( findProducts(Number(indexNumber),
+                   String(nameStr))
+                );
+
+            } else if (indexNumber == null && String(nameStr) != null){
+              __response = ( findProducts(Number(indexNumber),
+                   String(nameStr)));
+            }
+            for ( const __property of Array(JSON.parse(__response))) {
+                return __property
+            }
+        } catch(e){
+            let __err = `Error message: ${e.message}`
+            return __err
         }
+
     }
 }
 
 
-const prods = new GoodsList(names='Пирожок', descriptions ='LA-LA-LA-LA',
+const prods = new GoodsList(null,names='Пирожок', descriptions ='LA-LA-LA-LA',
     size=1050, price=1355, avaible=false,
     filter=' ',sortPrices = false, sortDirs= false
 )
-// console.log( prods.getFile(d))
-console.log( `dbReadTheDataJson: ${JSON.stringify(prods.setProducts())}`)
+
+console.log( `1. getFile: ${JSON.stringify(prods.getFile())}`)
+console.log( " ")
+console.log( " ")
+console.log( `2. dbReadTheDataJson: ${JSON.stringify(prods.dbReadTheDataJson())}`)
+console.log( " ")
+console.log( " ")
+console.log(`3. setProducts: ${JSON.stringify(prods.setProducts())}`)
+console.log( " ")
+console.log( " ")
+console.log(`4. findProducts: ${JSON.stringify(prods.findProducts(id=null, name='Торт'))}`)
+console.log( " ")
+console.log( " ")
+console.log(`5. setAvailable: ${JSON.stringify(prods.setAvailable(
+    valueBoolen=true,
+    indexNumber=0,
+    nameStr=null))}`)
