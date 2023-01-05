@@ -1,71 +1,30 @@
-
-const {len} = require("./functions")
-// import Good from "./js/goodJS.js";
-// const good = require("D:\\django-sites\\NetologeJavaScript\\1.3_ООП_и_функции\\js\\goodJS.js");
-// const {resolve} = require("dns/promises");
-// const {rejects} = require("assert");
-// const {Good} = require("./js/goodJS.js");
-let d = {"products": [
-    {
-      "id": 0,
-      "name": "Торт",
-      "descriptions": "ля-ля-ля Тортище",
-      "sizes": 100,
-      "prices": 12,
-      "avaibles": false,
-      "filter": " ",
-      "sortPrices": false,
-      "sortDirs": false
-    }
-  ]
-}
-
-class Good {
-    constructor(id = 0, names, descriptions, sizes = 0, prices = 0, availbles = false) {
-        this.id = id;
-        this.name = names;
-        this.description = descriptions;
-        this.size = sizes;
-        this.price = prices;
-        this.availble = availbles;
-    }
-}
-
+// import { Good } from "./goodJS";
+const fs = require('fs');
+const { Good } = require('./goodJS');
+const f = Object(require('../root.json'));
 class GoodsList extends Good {
-    constructor(id=0, names, descriptions, sizes = 0, prices = 0, availble, filter, sortPrices = false, sortDirs = false) {
-        super(id, names, descriptions, sizes, prices, availble);
-
-        this.filter = filter;
+    constructor(id, names, descriptions, size = 0, prices = 0, availble, filters, sortPrices = false, sortDirs = false) {
+        super(id, names, descriptions, size, prices, availble);
+        this.filters = filters;
         this.sortPrice = sortPrices;
         this.sortDir = sortDirs;
-        this.__lenResponse = null;
-
-
+        this.lenResponse = null;
     }
-
-    getFile(loader= d){
-        return JSON.stringify(loader)
-        }
-
-    dbReadTheDataJson(){
-        let __response = this.getFile();
-        return JSON.parse(__response)
-        }
-
-    setProducts(__newData = null){
-        let f = this.dbReadTheDataJson()
-        let len = f['products'].length
+    getFile(loader = f) {
+        return super.getFile(loader = f);
+    }
+    setProducts(__newData = null) {
+        let fs = require('fs');
+        let __f = super.dbReadTheDataJson();
+        let __len = f['products'].length;
         let __i = 0;
-
-        for (let elem in f['products'] ){
-            if (f['products'][__i]['id'] === len)
-                return "Rewrite the 'id'"
-            __i++
-
+        for (let elem in __f['products']) {
+            if (__f['products'][__i]['id'] === __len)
+                return "Rewrite the 'id'";
+            __i++;
         }
-
         __newData = {
-            id: len,
+            id: __len,
             name: this.name,
             descriptions: this.description,
             sizes: this.size,
@@ -75,94 +34,94 @@ class GoodsList extends Good {
             sortPrices: this.sortPrice,
             sortDirs: this.sortDir,
         };
-
         try {
-            f['products'].push(__newData)
-            return f
-
-        } catch (e) {
-            let err = ("ERROR:" + e.message)
-            return err
+            let __data = fs.readFileSync('./root.json');
+            let __object = JSON.parse(__data);
+            (__object["products"]).push(__newData);
+            let __newStrData = JSON.stringify(__object);
+            fs.writeFile('./root.json', __newStrData, 'utf-8', (err) => {
+                if (err) {
+                    console.log((`ERROR: ${err.name}` + ` ERROR-message ${err.message}`));
+                }
+                else {
+                    console.log("Rewrite the file!");
+                }
+            });
+        }
+        catch (e) {
+            let err = ("ERROR:" + e.message);
+            return err;
         }
     }
-
-    findProducts(id=null, name=null) {
-        let __f = this.setProducts(null)
-        let __i = 0;
-        // let reg = /^\d*/
-        // str.search(reg) или str.test(reg)
-        // if (atrName.test(reg) === -1) {...}
-        //               ^
-        // TypeError: atrName.test is not a function
-
+    findProducts(ids = null, name = null) {
+        try {
+            let __f = this.setProducts(null);
+            let __i = 0;
+            let __el;
+            if (ids != null && name == null) {
+                for (__el of (Array(__f['products'])[__i])) {
+                    if (__el.id === ids) {
+                        return (__el);
+                    }
+                    __i++;
+                }
+            }
+            else if (name != null && ids == null) {
+                for (__el of (Array(__f['products'])[__i])) {
+                    if (__el.name === name) {
+                        return (__el);
+                    }
+                    __i++;
+                }
+            }
+        }
+        catch (e) {
+            let __err = `Error: massage ${e.message}`;
+            return __err;
+        }
+    }
+    setAvailable(valueBoolen = false, id = null, name = null) {
+        let __response = null;
+        let findProducts = this.findProducts;
         try {
             if (id != null && name == null) {
-                for (let __el of (Array(__f['products'])[__i])) {
-                    if (__el.id === id) {
-                        return (__el)
-                    }
-                    __i++
-                }
-            } else if (name != null && id == null) {
-                for (let __el of (Array(__f['products'])[__i])) {
-                    if (__el.name === name) {
-                        return (__el)
-                    }
-                    __i++
-                }
+                console.log("< ================ >");
+                __response = (findProducts(id, name));
             }
-        }catch (e) {
-            let __err = `Error: massage ${e.message}`
-            return __err
+            else if (id == null && String(name) != null) {
+                __response = (findProducts(Number(id), String(name)));
+            }
+            for (const __property of Array(JSON.parse(__response))) {
+                return __property;
+            }
         }
-
-
-    }
-    setAvailable(valueBoolen=false, indexNumber=null, nameStr=null) {
-        let  __response = null;
-        let findProducts = this.findProducts
-        try {
-
-
-            if (Number(indexNumber) != null && nameStr == null) {
-                __response = ( findProducts(Number(indexNumber),
-                   String(nameStr))
-                );
-
-            } else if (indexNumber == null && String(nameStr) != null){
-              __response = ( findProducts(Number(indexNumber),
-                   String(nameStr)));
-            }
-            for ( const __property of Array(JSON.parse(__response))) {
-                return __property
-            }
-        } catch(e){
-            let __err = `Error message: ${e.message}`
-            return __err
+        catch (e) {
+            let __err = `Error message: ${e.message}, stack ${String(e.stack)}`;
+            console.log(__err);
+            return;
         }
-
     }
 }
-
-
-const prods = new GoodsList(null,names='Пирожок', descriptions ='LA-LA-LA-LA',
-    size=1050, price=1355, avaible=false,
-    filter=' ',sortPrices = false, sortDirs= false
-)
-
-console.log( `1. getFile: ${JSON.stringify(prods.getFile())}`)
-console.log( " ")
-console.log( " ")
-console.log( `2. dbReadTheDataJson: ${JSON.stringify(prods.dbReadTheDataJson())}`)
-console.log( " ")
-console.log( " ")
-console.log(`3. setProducts: ${JSON.stringify(prods.setProducts())}`)
-console.log( " ")
-console.log( " ")
-console.log(`4. findProducts: ${JSON.stringify(prods.findProducts(id=null, name='Торт'))}`)
-console.log( " ")
-console.log( " ")
-console.log(`5. setAvailable: ${JSON.stringify(prods.setAvailable(
-    valueBoolen=true,
-    indexNumber=0,
-    nameStr=null))}`)
+// let names;
+// let descriptions;
+// let sizes;
+// let prices;
+// let avaible;
+// let filter;
+// let sortPrices;
+const prods = new GoodsList(null, 'Пирожок', 'LA-LA-LA-LA', 1050, 1355, false, ' ', false, false);
+console.log(`1. getFile: ${JSON.stringify(prods.getFile())}`);
+console.log(" ");
+console.log(" ");
+console.log(`2. dbReadTheDataJson: ${JSON.stringify(prods.dbReadTheDataJson())}`);
+console.log(" ");
+console.log(" ");
+console.log(`3. setProducts: ${JSON.stringify(prods.setProducts(f))}`);
+console.log(" ");
+console.log(" ");
+console.log(`4. findProducts: ${JSON.stringify(prods.findProducts(1, null))}`);
+console.log(" ");
+console.log(" ");
+console.log(`5. setAvailable: ${JSON.stringify(prods.setAvailable(false, 1, null))}`);
+console.log(" ");
+console.log(" ");

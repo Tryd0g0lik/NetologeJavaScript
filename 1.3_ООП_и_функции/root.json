@@ -1,14 +1,1 @@
-{"products": [
-    {
-      "id": 0,
-      "name": "Торт",
-      "descriptions": "ля-ля-ля Тортище",
-      "sizes": 100,
-      "prices": 12,
-      "avaibles": false,
-      "filter": " ",
-      "sortPrices": false,
-      "sortDirs": false
-    }
-  ]
-}
+{"products":[{"id":0,"name":"Торт","descriptions":"ля-ля-ля Тортище","sizes":100,"prices":12,"avaibles":false,"filter":" ","sortPrices":false,"sortDirs":false},{"id":1,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"prices":1355,"avaibles":false,"sortPrices":false,"sortDirs":false}]}
