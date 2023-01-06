@@ -42,6 +42,8 @@ class GoodsList extends Good{
     // }
     setProducts(__newData: string | object = null,
                 path:string ): string | object {
+        // добавление товара в базу
+
         let fs = require('fs');
         let __f:object = super.getFile(path)
         let __len: number = f['products'].length
@@ -90,9 +92,7 @@ class GoodsList extends Good{
     findProducts(ids:number | null =null,
                  name: string| null =null,
                  path:string): string{
-
-
-
+        // поиск товара
         try {
             let __f: string | object = (super.getFile(path));
             let __i: number = 0;
@@ -117,56 +117,9 @@ class GoodsList extends Good{
             let __err: string = `Error: massage ${e.message}`
             return __err
         }
-
-
     }
 
-    setAvailable(valueBoolen: boolean|string=false,
-                 id:number|null=null,
-                 name:string|null=null,
-                 path: string) {
 
-        let __i: number = 0;
-        let __ind: number = 0;
-        let __value = [id, name]
-        let __prop = ['id', 'name']
-
-        try {
-            for (let atr of __value) {
-                if (atr != null) {
-
-                    let __arr = (super.getFile(path))['products'];
-                    for (__ind; __ind < (__arr).length; __ind++) {
-
-                        if (Number(__arr[__ind][__prop[__i]]) === Number(atr) ||
-                            String(__arr[__ind][__prop[__i]]) === String(atr)) {
-
-                            __arr[__ind].avaibles = String(__arr[__ind].avaibles).replace(String(__arr[__ind].avaibles),
-                                String(valueBoolen));
-                            fs.writeFileSync('./root.json', JSON.stringify({ "products": __arr }),
-                                'utf-8'), (err) => {
-
-                                if (err){
-                                   console.log((`ERROR: ${err.name}` + ` ERROR-message ${err.message}`));
-                                }
-                                else {
-                                    console.log("Rewrite too this's file!");
-                                }
-                            };
-                        }
-
-                    }
-                }
-
-                __i++;
-            }
-        } catch(e){
-            let __err = `Error message: ${e.message}, stack ${String(e.stack)}`
-            console.log(__err)
-            return
-        }
-
-    }
 
 
 

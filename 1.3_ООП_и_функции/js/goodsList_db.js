@@ -1,5 +1,6 @@
 // import { Good } from "./goodJS";
 const fs = require('fs');
+
 const { Good } = require('./goodJS');
 const f = Object(require('../root.json'));
 class GoodsList extends Good {
@@ -14,6 +15,7 @@ class GoodsList extends Good {
     //     return super.getFile(loader=f)
     // }
     setProducts(__newData = null, path) {
+        // добавление товара в базу
         let fs = require('fs');
         let __f = super.getFile(path);
         let __len = f['products'].length;
@@ -53,6 +55,7 @@ class GoodsList extends Good {
         }
     }
     findProducts(ids = null, name = null, path) {
+        // поиск товара
         try {
             let __f = (super.getFile(path));
             let __i = 0;
@@ -79,39 +82,6 @@ class GoodsList extends Good {
             return __err;
         }
     }
-    setAvailable(valueBoolen = false, id = null, name = null, path) {
-        let __i = 0;
-        let __ind = 0;
-        let __value = [id, name];
-        let __prop = ['id', 'name'];
-        try {
-            for (let atr of __value) {
-                if (atr != null) {
-                    let __arr = (super.getFile(path))['products'];
-                    for (__ind; __ind < (__arr).length; __ind++) {
-                        if (Number(__arr[__ind][__prop[__i]]) === Number(atr) ||
-                            String(__arr[__ind][__prop[__i]]) === String(atr)) {
-                            __arr[__ind].avaibles = String(__arr[__ind].avaibles).replace(String(__arr[__ind].avaibles), String(valueBoolen));
-                            fs.writeFileSync('./root.json', JSON.stringify({ "products": __arr }), 'utf-8'), (err) => {
-                                if (err) {
-                                    console.log((`ERROR: ${err.name}` + ` ERROR-message ${err.message}`));
-                                }
-                                else {
-                                    console.log("Rewrite too this's file!");
-                                }
-                            };
-                        }
-                    }
-                }
-                __i++;
-            }
-        }
-        catch (e) {
-            let __err = `Error message: ${e.message}, stack ${String(e.stack)}`;
-            console.log(__err);
-            return;
-        }
-    }
 }
 const prods = new GoodsList(null, 'Пирожок', 'LA-LA-LA-LA', 1050, 1355, false, ' ', false, false);
 console.clear();
@@ -126,6 +96,6 @@ console.clear();
 // console.log(`3. findProducts: ${ setTimeout( ()=>{console.log(JSON.stringify(prods.findProducts(1, null, './root.json')))}, 1000)}`)
 console.log(" ");
 console.log(" ");
-console.log(`4. setAvailable: ${JSON.stringify(prods.setAvailable("true", 12, null, './root.json'))}`);
+console.log(`4. setAvailable: ${JSON.stringify(prods.setAvailable("true", 16, null, './root.json'))}`);
 console.log(" ");
 console.log(" ");
