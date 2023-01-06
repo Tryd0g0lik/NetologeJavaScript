@@ -6,24 +6,26 @@
 //     price: number;
 //     availble: boolean;
 // }
+//
+//
+//
+//
+// let d = {"products": [
+//     {
+//       "id": 0,
+//       "name": "Торт",
+//       "descriptions": "ля-ля-ля Тортище",
+//       "sizes": 100,
+//       "prices": 12,
+//       "avaibles": false,
+//       "filter": " ",
+//       "sortPrices": false,
+//       "sortDirs": false
+//     }
+//   ]
+// }
 
-
-
-
-let d = {"products": [
-    {
-      "id": 0,
-      "name": "Торт",
-      "descriptions": "ля-ля-ля Тортище",
-      "sizes": 100,
-      "prices": 12,
-      "avaibles": false,
-      "filter": " ",
-      "sortPrices": false,
-      "sortDirs": false
-    }
-  ]
-}
+const fs = require("fs");
 
 class Good {
     id?: number;
@@ -47,13 +49,10 @@ class Good {
         this.availble = availbles;
     }
 
-     getFile(loader= d){
-        return JSON.stringify(loader)
-        }
+     getFile(path: string= null){
+        let __data: any = fs.readFileSync(path);
+        return JSON.parse(__data);
 
-    dbReadTheDataJson(): object{
-        let __response: string = this.getFile();
-        return JSON.parse(__response)
         }
 
 }
