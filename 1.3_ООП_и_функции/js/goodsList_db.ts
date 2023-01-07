@@ -40,7 +40,7 @@ class GoodsList extends Good{
     // getFile(loader: string|object= f){
     //     return super.getFile(loader=f)
     // }
-    setProducts(__newData: string | object = null,
+    addProducts(__newData: string | object = null,
                 path:string ): string | object {
         // добавление товара в базу
 
@@ -136,14 +136,14 @@ console.clear()
 //     prods.getFile('./root.json'))}`)
 // console.log( " ")
 // console.log( " ")
-// console.log(`2. setProducts: ${JSON.stringify(
-//     prods.setProducts(null, './root.json'))}`)
+// console.log(`2. addsetProducts: ${JSON.stringify(
+//     prods.addProducts(null, './root.json'))}`)
 // console.log( " ")
 // console.log( " ")
 // console.log(`3. findProducts: ${ setTimeout( ()=>{console.log(JSON.stringify(prods.findProducts(1, null, './root.json')))}, 1000)}`)
 console.log( " ")
 console.log( " ")
 console.log(`4. setAvailable: ${JSON.stringify(prods.setAvailable("true",
-    null, "Сироп", './root.json'))}`);
+    16, null, './root.json', true))}`);
 console.log(" ");
 console.log(" ");

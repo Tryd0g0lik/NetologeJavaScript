@@ -1,6 +1,5 @@
 // import { Good } from "./goodJS";
 const fs = require('fs');
-
 const { Good } = require('./goodJS');
 const f = Object(require('../root.json'));
 class GoodsList extends Good {
@@ -96,6 +95,6 @@ console.clear();
 // console.log(`3. findProducts: ${ setTimeout( ()=>{console.log(JSON.stringify(prods.findProducts(1, null, './root.json')))}, 1000)}`)
 console.log(" ");
 console.log(" ");
-console.log(`4. setAvailable: ${JSON.stringify(prods.setAvailable("true", 16, null, './root.json'))}`);
+console.log(`4. setAvailableRemove: ${JSON.stringify(prods.setAvailableRemove("false", 15, null, './root.json', true))}`);
 console.log(" ");
 console.log(" ");
