@@ -1,6 +1,5 @@
 const { Main } = require("./main");
 const fs = require("fs");
-const {json} = require("stream/consumers");
 class Good extends Main {
     constructor(id = 0, names, descriptions, sizes = 0, prices = 0, availbles = false) {
         super(id, names, descriptions, sizes, prices, availbles);
@@ -10,12 +9,12 @@ class Good extends Main {
         return JSON.parse(__data);
     }
     setAvailableRemove(valueBoolen = false, id = null, name = null, path, remove = false) {
-        //1. Активация товара проходит gentv, поштучая. Списком товара работать не получится.
+        //1. Активация товара путем замены 'valueBoolen' на значение 'true'.
+        // Работа проходит с единичным товаром/объектом. Работато со списком товара не
+        // получится.
         // 2. Найти товар возможно через 'ID' или 'name'-наименование товара.
-
         // 3. remove() работает если 'remove=true'. Но т.к. работа проводится с форматом JSON,
         // а не DOM, вместо 'remove()' используется 'replice()'
-
         let __i = 0;
         let __ind = 0;
         let __value = [id, name];
@@ -31,8 +30,7 @@ class Good extends Main {
                                 __arr[__ind].avaibles = String(__arr[__ind].avaibles).replace(String(__arr[__ind].avaibles), String(valueBoolen));
                             }
                             else {
-
-                                (__arr).splice(__ind,1 );
+                                (__arr).splice(__ind, 1);
                             }
                             fs.writeFileSync('./root.json', JSON.stringify({ "products": __arr }), 'utf-8'), (err) => {
                                 if (err) {

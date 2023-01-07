@@ -1,4 +1,6 @@
 // import { Good } from "./goodJS";
+// import * as fun from './function';
+const fun = require('./module/lessmore');
 const fs = require('fs');
 const { Good } = require('./goodJS');
 const f = Object(require('../root.json'));
@@ -13,7 +15,7 @@ class GoodsList extends Good {
     // getFile(loader: string|object= f){
     //     return super.getFile(loader=f)
     // }
-    setProducts(__newData = null, path) {
+    addProducts(__newData = null, path) {
         // добавление товара в базу
         let fs = require('fs');
         let __f = super.getFile(path);
@@ -53,33 +55,59 @@ class GoodsList extends Good {
             return err;
         }
     }
-    findProducts(ids = null, name = null, path) {
-        // поиск товара
+    findProducts(ids = null, name = null, path, filtLengthLess = false, filtLengthMore = false, symbolWord = 0) {
+        // фильтр товара
+        // фильтр по 1.наименованию, 2.id, 3. длина имени товара, 4. присутствие слова в имени.
         try {
             let __f = (super.getFile(path));
             let __i = 0;
             let __el;
-            if (ids != null && name == null) {
-                for (__el of (Array(__f['products'])[__i])) {
+            let __arr = (__f['products']);
+            let __ind = 0;
+            let __response;
+            if (ids != null && name == null && symbolWord === 0 &&
+                filtLengthLess == false && filtLengthMore == false) {
+                for (__el of (Array(__arr)[__i])) {
                     if (__el.id === ids) {
                         return (__el);
                     }
                     __i++;
                 }
             }
-            else if (name != null && ids == null) {
-                for (__el of (Array(__f['products'])[__i])) {
+            else if (name != null && ids == null && symbolWord === 0 &&
+                filtLengthLess == false && filtLengthMore == false) {
+                for (__el of (Array(__arr)[__i])) {
                     if (__el.name === name) {
                         return (__el);
                     }
                     __i++;
                 }
             }
+            else if (filtLengthLess == true && filtLengthMore == false ||
+                filtLengthLess == false && filtLengthMore == true) {
+                for (__ind; __ind < __arr.length; __ind++) {
+                    let __name = __arr[__ind].name;
+                    if (symbolWord != 0) {
+                        __response = fun.lessMore(__arr, filtLengthLess, filtLengthMore, symbolWord);
+                        console.log(`__response: ${__response}`);
+                    }
+                    else {
+                        return "You need refine a number for symbols count";
+                    }
+                    console.log(`__response: ${__response}`);
+                }
+            }
+            else if (filtLengthLess == true && filtLengthMore == true) {
+                return "Repeat the filter. Choose the 'filtLengthLess' or 'filtLengthMore'.";
+            }
         }
         catch (e) {
             let __err = `Error: massage ${e.message}`;
             return __err;
         }
+    }
+    filtrProducts() {
+        // фильтр по 1.наименованию, 2.id, 3. длина имени товара, 4. присутствие слова в имени.
     }
 }
 const prods = new GoodsList(null, 'Пирожок', 'LA-LA-LA-LA', 1050, 1355, false, ' ', false, false);
@@ -88,13 +116,17 @@ console.clear();
 //     prods.getFile('./root.json'))}`)
 // console.log( " ")
 // console.log( " ")
-// console.log(`2. setProducts: ${JSON.stringify(
-//     prods.setProducts(null, './root.json'))}`)
+// console.log(`2. addsetProducts: ${JSON.stringify(
+//     prods.addProducts(null, './root.json'))}`)
 // console.log( " ")
 // console.log( " ")
-// console.log(`3. findProducts: ${ setTimeout( ()=>{console.log(JSON.stringify(prods.findProducts(1, null, './root.json')))}, 1000)}`)
+console.log(`3. findProducts: ${setTimeout(() => {
+    console.log(JSON.stringify(prods.findProducts(1, null, './root.json',
+        true, false, 3)));
+}, 1000)}`);
 console.log(" ");
 console.log(" ");
-console.log(`4. setAvailableRemove: ${JSON.stringify(prods.setAvailableRemove("false", 15, null, './root.json', true))}`);
+// console.log(`4. setAvailable: ${JSON.stringify(prods.setAvailable("true",
+//     16, null, './root.json', true))}`);
 console.log(" ");
 console.log(" ");

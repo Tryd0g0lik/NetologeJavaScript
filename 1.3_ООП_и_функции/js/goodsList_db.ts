@@ -1,5 +1,7 @@
 
 // import { Good } from "./goodJS";
+// import * as fun from './function';
+const fun = require('./module/lessmore')
 const fs = require('fs');
 
 const {Good} = require('./goodJS')
@@ -91,27 +93,56 @@ class GoodsList extends Good{
 
     findProducts(ids:number | null =null,
                  name: string| null =null,
-                 path:string): string{
-        // поиск товара
+                 path:string,
+                 filtLengthLess:boolean = false,
+                 filtLengthMore:boolean = false,
+                 symbolWord: number=0): string{
+        // фильтр товара
+        // фильтр по 1.наименованию, 2.id, 3. длина имени товара, 4. присутствие слова в имени.
         try {
             let __f: string | object = (super.getFile(path));
             let __i: number = 0;
             let __el: any;
+            let __arr = (__f['products']);
+            let __ind:number = 0;
+            let __response:any;
 
-            if (ids != null && name == null) {
-                for (__el of (Array(__f['products'])[__i])) {
+            if (ids != null && name == null && symbolWord === 0 &&
+                filtLengthLess == false &&  filtLengthMore == false){
+                for (__el of (Array(__arr)[__i])) {
                     if (__el.id === ids) {
                         return (__el)
                     }
                     __i++
                 }
-            } else if (name != null && ids == null) {
-                for (__el of (Array(__f['products'])[__i])) {
+            } else if (name != null && ids == null && symbolWord === 0 &&
+                filtLengthLess == false &&  filtLengthMore == false) {
+                for (__el of (Array(__arr)[__i])) {
                     if (__el.name === name) {
                         return (__el)
                     }
                     __i++
                 }
+            } else if (filtLengthLess == true && filtLengthMore == false ||
+                filtLengthLess == false && filtLengthMore == true){
+
+                for (__ind; __ind < __arr.length; __ind++) {
+                    let __name = __arr[__ind].name;
+
+                    if (symbolWord != 0){
+                        __response = fun.lessMore(__arr, filtLengthLess,
+                            filtLengthMore, symbolWord)
+
+                        console.log(`__response: ${__response}`)
+
+                    }else {
+                        return "You need refine a number for symbols count";
+                    }
+                    console.log(`__response: ${__response}`)
+                }
+
+            }else if (filtLengthLess == true && filtLengthMore == true){
+                return "Repeat the filter. Choose the 'filtLengthLess' or 'filtLengthMore'."
             }
         }catch (e) {
             let __err: string = `Error: massage ${e.message}`
@@ -119,7 +150,10 @@ class GoodsList extends Good{
         }
     }
 
+    filtrProducts(){
+        // фильтр по 1.наименованию, 2.id, 3. длина имени товара, 4. присутствие слова в имени.
 
+    }
 
 
 
@@ -140,10 +174,12 @@ console.clear()
 //     prods.addProducts(null, './root.json'))}`)
 // console.log( " ")
 // console.log( " ")
-// console.log(`3. findProducts: ${ setTimeout( ()=>{console.log(JSON.stringify(prods.findProducts(1, null, './root.json')))}, 1000)}`)
+console.log(`3. findProducts: ${ setTimeout( ()=>{console.log(
+    JSON.stringify(
+        prods.findProducts(1, null, './root.json', true, false, 3)))}, 1000)}`)
 console.log( " ")
 console.log( " ")
-console.log(`4. setAvailable: ${JSON.stringify(prods.setAvailable("true",
-    16, null, './root.json', true))}`);
+// console.log(`4. setAvailable: ${JSON.stringify(prods.setAvailable("true",
+//     16, null, './root.json', true))}`);
 console.log(" ");
 console.log(" ");
