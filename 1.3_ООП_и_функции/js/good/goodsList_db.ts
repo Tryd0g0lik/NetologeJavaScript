@@ -5,6 +5,7 @@ const fun = require('./module/lessmore')
 const fs = require('fs');
 const sor = require("./module/functions");
 const {Good} = require('./goodJS');
+
 const f: string | object = Object(require( '../../root.json'));
 
 interface Result {
@@ -43,7 +44,10 @@ class GoodsList extends Good{
 
 
     }
+        /*
+            Добавляем кол-во позиции и записываем в отдельный файл
 
+         */
     addProducts(__newData: string | object = null,
                 path:string ): string | object {
         // добавление товара в базу

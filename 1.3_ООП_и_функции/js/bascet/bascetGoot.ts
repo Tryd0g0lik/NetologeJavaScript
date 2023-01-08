@@ -1,5 +1,6 @@
 const {Good} = require("../good/goodJS");
 const fs = require("fs");
+const checkId = require("./funBascet").checkId;
 
 // const BG = require("./js/goodJS");
 
@@ -22,34 +23,44 @@ class BasketGood extends Good{
     bascet(i:number, count:number){
         this.amount = count;
         try {
-            let __f: object = JSON.parse(super.getFile("./root.json"))
+            let __f = JSON.parse(fs.readFileSync("./root.json"));
+
             for (let __i = 0; __i < (__f["products"]).length; __i++) {
                 if (__f["products"][__i].id === i) {
+
                     let __prod = __f["products"][__i];
-                    let __count = JSON.parse(super.getFile("./bascetAmount.json"));
-                    __f["products"][__i].push(({"amount": this.amount}));
+                    let __count = JSON.parse(fs.readFileSync("./bascetAmount.json"));
 
-                    fs.writeFile("./bascetAmount.json", String(__count) + String({"bascetCount": __f["products"][__i]}), (err) => {
-                        if (err) {
-                            console.log(`ERRORE 'bascet' Message: ${err.message}`);
-                            console.log(`ERRORE 'bascet' Stack: ${err.stack}`);
-                        }
+                    __prod["amount"] = this.amount;
+                    if (checkId(__count["bascetCount"], i) === true) {
 
-                    })
+                        (__count["bascetCount"]).push(__prod)
+                        fs.writeFile("./bascetAmount.json", JSON.stringify(__count), 'utf-8', (err) => {
+                            if (err) {
+                                console.log(`ERRORE 'bascet' Message: ${err.message}`);
+                                console.log(`ERRORE 'bascet' Stack: ${err.stack}`);
+                            } else {
+                                console.log("Rewrite the file!");
+                            }
+                        });
+                    } else {
+                        console.log(`Backet has this's position id: ${i}` )
+                    }
                 }
-
             }
-        } catch (e) {
+        }
+        catch (e) {
             console.log(`ERRORE BasketGood Message: ${e.message}`);
             console.log(`ERRORE BasketGood Stack: ${e.stack}`);
         }
     }
-
-
 }
+
+
+
 
 console.clear()
 const prod = new  BasketGood();
 
 
-console.log(prod.bascet(1, 3))
+console.log(prod.bascet(5, 3))
