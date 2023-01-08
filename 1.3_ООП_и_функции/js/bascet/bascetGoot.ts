@@ -1,8 +1,21 @@
-const BG = require("./js/goodJS");
+const {Good} = require("../good/goodJS");
 
-class BasketGood{
+// const BG = require("./js/goodJS");
+
+class BasketGood extends Good{
     amount: number;
-    constructor(amount){
+    constructor(
+        amount,
+        id = 0,
+        names,
+        descriptions,
+        sizes = 0,
+        prices = 0,
+        availbles = false
+        ) {
+        super(id, names, descriptions, sizes, prices, availbles);
         this.amount = amount;
     }
+
+
 }

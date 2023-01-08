@@ -2,14 +2,14 @@
 // import * as fun from './function';
 const fun = require('./module/lessmore');
 const fs = require('fs');
+const sor = require("./module/functions");
 const { Good } = require('./goodJS');
-const f = Object(require('../root.json'));
+const f = Object(require('../../root.json'));
 class GoodsList extends Good {
-    constructor(id, names, descriptions, size = 0, prices = 0, availble, filters, sortPrices = false, sortDirs = false) {
+    constructor(id, names, descriptions, size = 0, prices = 0, availble, filters, sortPrices = false) {
         super(id, names, descriptions, size, prices, availble);
         this.filters = filters;
         this.sortPrice = sortPrices;
-        this.sortDir = sortDirs;
         this.lenResponse = null;
     }
     addProducts(__newData = null, path) {
@@ -30,9 +30,6 @@ class GoodsList extends Good {
             sizes: this.size,
             prices: this.price,
             avaibles: this.availble,
-            filter: this.filter,
-            sortPrices: this.sortPrice,
-            sortDirs: this.sortDir,
         };
         try {
             let __object = super.getFile(path);
@@ -52,7 +49,7 @@ class GoodsList extends Good {
             return err;
         }
     }
-    findProducts(ids = null, name = null, path, filtLengthLess = false, filtLengthMore = false, symbolWord = 0, sort = false) {
+    findProducts(ids = null, name = null, path, filtLengthLess = false, filtLengthMore = false, symbolWord = 0, sort = "-false", sortPrices = "-false", sortDirs = "-false") {
         /*
         TODO: Search/filter by a 'name' product, 'id' prodect and length product;
         Atributes:  'ids'   - this's index product;
@@ -61,8 +58,14 @@ class GoodsList extends Good {
                     'true' then search go by word length - less or more;
 
                     'symbolWord'    - this's integer for orientation on the word length.
-                    'sort'  - 'false' sorts [A -> Z], the 'true' sorts [Z -> A] Sort go when
-                    passes the search by word length;
+
+                    'sort'  - "-false" it's doesn't sorted and a 'sortDirs', 'sortPrices'
+                    is "-false", 'false' sorts [A -> Z], the 'true' sorts [Z -> A]
+                    Sort go when passes the search by word length;
+
+                    'sortPrices'    -   this's sort by prices column when a 'sort' is "-false" and a 'sortDirs'
+                    is "-false",
+                    'sortDirs'  -   Sorts when value is 'false' or 'true'.
          */
         try {
             let __f = (super.getFile(path));
@@ -103,14 +106,15 @@ class GoodsList extends Good {
                  and return Arrays list where has these strings.
                  */
                 __response = fun.lessMore(__arr, filtLengthLess, filtLengthMore, null, symbolWord);
-                for (__i = 0; __i < __lenArray; __i++) { // The lisr of JSON Arrays
+                for (__i = 0; __i < __lenArray; __i++) { // The list of JSON Arrays
                     for (__ind = 0; __ind < __response.length; __ind++) {
                         if (String(__arr[__i].name) === String((__response)[__ind])) {
                             __result.push([Number(__arr[__i].id), __arr[__i]]);
                         }
                     }
                 }
-                if (sort === false) {
+
+                if (sort === false && sortPrices === "-false") {
                     __result.sort((a, b) => {
                         if (a > b)
                             return 1;
@@ -119,8 +123,9 @@ class GoodsList extends Good {
                         if (a < b)
                             return -1;
                     });
+                    return __result;
                 }
-                else if (sort === true) {
+                else if (sort === true && sortPrices === "-false") {
                     __result.sort((a, b) => {
                         if (a > b)
                             return -1;
@@ -129,8 +134,34 @@ class GoodsList extends Good {
                         if (a < b)
                             return 1;
                     });
+                    return __result;
                 }
+                else if (sort === "-false" && sortPrices === false) {
+                    __result = sor.sorting(__result);
+                    __result.sort((a, b) => {
+                        if (a > b)
+                            return 1;
+                        if (a == b)
+                            return 0;
+                        if (a < b)
+                            return -1;
+                    });
+                    return __result;
+                }
+                else if (sort === "-false" && sortPrices === true) {
+                    __result = sor.sorting(__result);
+                    __result.sort((a, b) => {
+                        if (a > b)
+                            return -1;
+                        if (a == b)
+                            return 0;
+                        if (a < b)
+                            return 1;
+                    });
+                    return __result;
+                } else {
                 return __result;
+            }
                 /* ------End datarmination at the word length------ */
             }
             else if (filtLengthLess === true && filtLengthMore === true) {
@@ -138,8 +169,9 @@ class GoodsList extends Good {
             }
         }
         catch (e) {
-            let __err = `ErroR: massagE ${e.message} /=> ${e.stack}`;
-            return __err;
+            console.log(`ErroR: massagE ${e.message}`);
+            console.log(e.stack);
+            return;
         }
     }
 }
@@ -154,7 +186,8 @@ console.clear();
 // console.log( " ")
 // console.log( " ")
 console.log(`3. findProducts: ${setTimeout(() => {
-    console.log(JSON.stringify(prods.findProducts(1, null, './root.json', false, true, 3, true)));
+    console.log(JSON.stringify(prods.findProducts(1, null, './root.json', false, 
+        true, 3, true, "-false")));
 }, 1000)}`);
 console.log(" ");
 console.log(" ");

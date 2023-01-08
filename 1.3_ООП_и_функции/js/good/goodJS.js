@@ -15,7 +15,6 @@ class Good extends Main {
         // 2. Найти товар возможно через 'ID' или 'name'-наименование товара.
         // 3. remove() работает если 'remove=true'. Но т.к. работа проводится с форматом JSON,
         // а не DOM, вместо 'remove()' используется 'replice()'
-
         let __i = 0;
         let __ind = 0;
         let __value = [id, name];

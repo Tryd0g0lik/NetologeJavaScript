@@ -3,16 +3,17 @@
 // import * as fun from './function';
 const fun = require('./module/lessmore')
 const fs = require('fs');
+const sor = require("./module/functions");
+const {Good} = require('./goodJS');
+const f: string | object = Object(require( '../../root.json'));
 
-const {Good} = require('./goodJS')
-const f: string | object = Object(require( '../root.json'));
 interface Result {
         __id: number;
         __value: string;
     }
 class GoodsList extends Good{
     filters?: string;
-    sortPrice: boolean;
+    sortPrice: string|boolean;
     sortDir: boolean;
     lenResponse: number;
 
@@ -38,7 +39,6 @@ class GoodsList extends Good{
 
         this.filters = filters;
         this.sortPrice = sortPrices;
-        this.sortDir = sortDirs;
         this.lenResponse = null;
 
 
@@ -67,9 +67,7 @@ class GoodsList extends Good{
                 sizes: this.size,
                 prices: this.price,
                 avaibles: this.availble,
-                filter: this.filter,
-                sortPrices: this.sortPrice,
-                sortDirs: this.sortDir,
+
         };
 
         try {
@@ -101,7 +99,9 @@ class GoodsList extends Good{
                  filtLengthLess:boolean = false,
                  filtLengthMore:boolean = false,
                  symbolWord: number=0,
-                 sort:boolean = false,
+                 sort: string | boolean = "-false",
+                 sortPrices: string | boolean = "-false",
+                 sortDirs: string | boolean = "-false",
                 ): string{
 
         /*
@@ -112,8 +112,14 @@ class GoodsList extends Good{
                     'true' then search go by word length - less or more;
 
                     'symbolWord'    - this's integer for orientation on the word length.
-                    'sort'  - 'false' sorts [A -> Z], the 'true' sorts [Z -> A] Sort go when
-                    passes the search by word length;
+
+                    'sort'  - "-false" it's doesn't sorted and a 'sortDirs', 'sortPrices'
+                    is "-false", 'false' sorts [A -> Z], the 'true' sorts [Z -> A]
+                    Sort go when passes the search by word length;
+
+                    'sortPrices'    -   this's sort by prices column when a 'sort' is "-false" and a 'sortDirs'
+                    is "-false",
+                    'sortDirs'  -   Sorts when value is 'false' or 'true'.
          */
 
         try {
@@ -161,34 +167,51 @@ class GoodsList extends Good{
                 __response = fun.lessMore(__arr, filtLengthLess,
                     filtLengthMore, null, symbolWord);
 
-                for (__i = 0; __i < __lenArray; __i++){ // The lisr of JSON Arrays
+                for (__i = 0; __i < __lenArray; __i++){ // The list of JSON Arrays
                     for (__ind = 0; __ind < __response.length; __ind++) {
 
                         if (String(__arr[__i].name) === String((__response)[__ind])){
                             __result.push([Number(__arr[__i].id), __arr[__i]]);
 
-
                             }
-
                         }
-
                     }
-                if (sort === false) {
+
+                if (sort === false && sortPrices === "-false") {
                     __result.sort((a, b) =>{
                         if (a > b) return 1;
                         if (a == b) return 0;
                         if (a < b) return -1;
                     });
-                } else if (sort === true) {
+                    return __result
+                } else if (sort === true && sortPrices === "-false" ) {
                     __result.sort((a, b) => {
                         if (a > b) return -1;
                         if (a == b) return 0;
                         if (a < b) return 1;
                     });
-                }
-                return __result
+                    return __result
+                } else if (sort === "-false" && sortPrices === false)
+                {
+                    __result = sor.sorting(__result);
+                    __result.sort((a, b) => {
+                        if (a > b) return 1;
+                        if (a == b) return 0;
+                        if (a < b) return -1;
+                    });
+                    return __result
+                } else if (sort === "-false" && sortPrices === true)
+                {
+                    __result = sor.sorting(__result);
+                    __result.sort((a, b) => {
+                        if (a > b) return -1;
+                        if (a == b) return 0;
+                        if (a < b) return 1;
+                    });
 
-
+                } else {
+                return __result;
+            }
                 /* ------End datarmination at the word length------ */
 
             } else if (filtLengthLess === true && filtLengthMore === true){
@@ -196,8 +219,10 @@ class GoodsList extends Good{
             }
 
         }catch (e) {
-            let __err: string = `ErroR: massagE ${e.message} /=> ${e.stack}`
-            return __err
+            console.log(`ErroR: massagE ${e.message}`)
+            console.log(e.stack)
+
+            return
         }
     }
 
@@ -221,7 +246,8 @@ console.clear()
 console.log(`3. findProducts: ${ setTimeout( ()=>{console.log(
     JSON.stringify(
         prods.findProducts(1, null, './root.json', 
-            false, true, 6)))}, 1000)}`)
+            false, true, 3, "-false",
+            false)))}, 1000)}`)
 console.log( " ")
 console.log( " ")
 // console.log(`4. setAvailable: ${JSON.stringify(prods.setAvailable("true",
