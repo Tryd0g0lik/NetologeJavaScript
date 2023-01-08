@@ -100,7 +100,9 @@ class GoodsList extends Good{
                  path:string,
                  filtLengthLess:boolean = false,
                  filtLengthMore:boolean = false,
-                 symbolWord: number=0): string{
+                 symbolWord: number=0,
+                 sort:boolean = false,
+                ): string{
 
         /*
         TODO: Search/filter by a 'name' product, 'id' prodect and length product;
@@ -110,6 +112,8 @@ class GoodsList extends Good{
                     'true' then search go by word length - less or more;
 
                     'symbolWord'    - this's integer for orientation on the word length.
+                    'sort'  - 'false' sorts [A -> Z], the 'true' sorts [Z -> A] Sort go when
+                    passes the search by word length;
          */
 
         try {
@@ -143,6 +147,7 @@ class GoodsList extends Good{
                     __i++
                 }
                 /* The search by name product - END */
+
             } else if (filtLengthLess === true && filtLengthMore === false ||
                 filtLengthLess === false && filtLengthMore === true){
 
@@ -160,15 +165,30 @@ class GoodsList extends Good{
                     for (__ind = 0; __ind < __response.length; __ind++) {
 
                         if (String(__arr[__i].name) === String((__response)[__ind])){
+                            __result.push([Number(__arr[__i].id), __arr[__i]]);
 
-                            __result.push([__arr[__i].id, __arr[__i]]);
+
+                            }
 
                         }
 
                     }
+                if (sort === false) {
+                    __result.sort((a, b) =>{
+                        if (a > b) return 1;
+                        if (a == b) return 0;
+                        if (a < b) return -1;
+                    });
+                } else if (sort === true) {
+                    __result.sort((a, b) => {
+                        if (a > b) return -1;
+                        if (a == b) return 0;
+                        if (a < b) return 1;
+                    });
                 }
-
                 return __result
+
+
                 /* ------End datarmination at the word length------ */
 
             } else if (filtLengthLess === true && filtLengthMore === true){

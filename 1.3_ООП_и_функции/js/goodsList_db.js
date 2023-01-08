@@ -52,7 +52,7 @@ class GoodsList extends Good {
             return err;
         }
     }
-    findProducts(ids = null, name = null, path, filtLengthLess = false, filtLengthMore = false, symbolWord = 0) {
+    findProducts(ids = null, name = null, path, filtLengthLess = false, filtLengthMore = false, symbolWord = 0, sort = false) {
         /*
         TODO: Search/filter by a 'name' product, 'id' prodect and length product;
         Atributes:  'ids'   - this's index product;
@@ -61,6 +61,8 @@ class GoodsList extends Good {
                     'true' then search go by word length - less or more;
 
                     'symbolWord'    - this's integer for orientation on the word length.
+                    'sort'  - 'false' sorts [A -> Z], the 'true' sorts [Z -> A] Sort go when
+                    passes the search by word length;
          */
         try {
             let __f = (super.getFile(path));
@@ -104,13 +106,34 @@ class GoodsList extends Good {
                 for (__i = 0; __i < __lenArray; __i++) { // The lisr of JSON Arrays
                     for (__ind = 0; __ind < __response.length; __ind++) {
                         if (String(__arr[__i].name) === String((__response)[__ind])) {
-                            __result.push([__arr[__i].id, __arr[__i]]);
+                            __result.push([Number(__arr[__i].id), __arr[__i]]);
                         }
                     }
                 }
+                if (sort === false) {
+                    __result.sort((a, b) => {
+                        if (a > b)
+                            return 1;
+                        if (a == b)
+                            return 0;
+                        if (a < b)
+                            return -1;
+                    });
+                }
+                else if (sort === true) {
+                    __result.sort((a, b) => {
+                        if (a > b)
+                            return -1;
+                        if (a == b)
+                            return 0;
+                        if (a < b)
+                            return 1;
+                    });
+                }
                 return __result;
                 /* ------End datarmination at the word length------ */
-            } else if (filtLengthLess === true && filtLengthMore === true) {
+            }
+            else if (filtLengthLess === true && filtLengthMore === true) {
                 return "Repeat the filter. Choose the 'filtLengthLess' or 'filtLengthMore'.";
             }
         }
@@ -131,7 +154,7 @@ console.clear();
 // console.log( " ")
 // console.log( " ")
 console.log(`3. findProducts: ${setTimeout(() => {
-    console.log(JSON.stringify(prods.findProducts(1, null, './root.json', false, true, 6)));
+    console.log(JSON.stringify(prods.findProducts(1, null, './root.json', false, true, 3, true)));
 }, 1000)}`);
 console.log(" ");
 console.log(" ");
