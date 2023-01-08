@@ -6,7 +6,10 @@ const fs = require('fs');
 
 const {Good} = require('./goodJS')
 const f: string | object = Object(require( '../root.json'));
-
+interface Result {
+        __id: number;
+        __value: string;
+    }
 class GoodsList extends Good{
     filters?: string;
     sortPrice: boolean;
@@ -38,10 +41,9 @@ class GoodsList extends Good{
         this.sortDir = sortDirs;
         this.lenResponse = null;
 
+
     }
-    // getFile(loader: string|object= f){
-    //     return super.getFile(loader=f)
-    // }
+
     addProducts(__newData: string | object = null,
                 path:string ): string | object {
         // добавление товара в базу
@@ -71,6 +73,8 @@ class GoodsList extends Good{
         };
 
         try {
+
+
             let __object = super.getFile(path);
             (__object["products"]).push(__newData);
             let __newStrData: string | any = JSON.stringify(__object);
@@ -105,57 +109,63 @@ class GoodsList extends Good{
             let __el: any;
             let __arr = (__f['products']);
             let __ind:number = 0;
-            let __response:any;
+            let __response:string[] = [];
+            let __result: Array<Array<Result>> | any = [];
+            const __lenArray: number = __arr.length;
 
-            if (ids != null && name == null && symbolWord === 0 &&
-                filtLengthLess == false &&  filtLengthMore == false){
+            if (ids !== null && name === null && symbolWord === 0 &&
+                filtLengthLess === false &&  filtLengthMore === false){
                 for (__el of (Array(__arr)[__i])) {
                     if (__el.id === ids) {
                         return (__el)
                     }
                     __i++
                 }
-            } else if (name != null && ids == null && symbolWord === 0 &&
-                filtLengthLess == false &&  filtLengthMore == false) {
+            } else if (name !== null && ids === null && symbolWord === 0 &&
+                filtLengthLess === false &&  filtLengthMore === false) {
+
                 for (__el of (Array(__arr)[__i])) {
                     if (__el.name === name) {
                         return (__el)
                     }
                     __i++
                 }
-            } else if (filtLengthLess == true && filtLengthMore == false ||
-                filtLengthLess == false && filtLengthMore == true){
+            } else if (filtLengthLess === true && filtLengthMore === false ||
+                filtLengthLess === false && filtLengthMore === true){
 
-                for (__ind; __ind < __arr.length; __ind++) {
-                    let __name = __arr[__ind].name;
+                /* ------Start datarmination at the word length------ */
+                /*
+                Here we get a string's list from variable '__response'
+                 and return Arrays list where has these strings.
+                 */
 
-                    if (symbolWord != 0){
-                        __response = fun.lessMore(__arr, filtLengthLess,
-                            filtLengthMore, symbolWord)
+                __response = fun.lessMore(__arr, filtLengthLess,
+                    filtLengthMore, null, symbolWord);
 
-                        console.log(`__response: ${__response}`)
+                for (__i = 0; __i < __lenArray; __i++){ // The lisr of JSON Arrays
+                    for (__ind = 0; __ind < __response.length; __ind++) {
 
-                    }else {
-                        return "You need refine a number for symbols count";
+                        if (String(__arr[__i].name) === String((__response)[__ind])){
+
+                            __result.push([__arr[__i].id, __arr[__i]]);
+
+                        }
+
                     }
-                    console.log(`__response: ${__response}`)
                 }
 
-            }else if (filtLengthLess == true && filtLengthMore == true){
+                return __result
+                /* ------End datarmination at the word length------ */
+
+            }else if (filtLengthLess === true && filtLengthMore === true){
                 return "Repeat the filter. Choose the 'filtLengthLess' or 'filtLengthMore'."
             }
+
         }catch (e) {
-            let __err: string = `Error: massage ${e.message}`
+            let __err: string = `ErroR: massagE ${e.message} /=> ${e.stack}`
             return __err
         }
     }
-
-    filtrProducts(){
-        // фильтр по 1.наименованию, 2.id, 3. длина имени товара, 4. присутствие слова в имени.
-
-    }
-
-
 
 }
 
@@ -176,7 +186,8 @@ console.clear()
 // console.log( " ")
 console.log(`3. findProducts: ${ setTimeout( ()=>{console.log(
     JSON.stringify(
-        prods.findProducts(1, null, './root.json', true, false, 3)))}, 1000)}`)
+        prods.findProducts(1, null, './root.json', 
+            false, true, 6)))}, 1000)}`)
 console.log( " ")
 console.log( " ")
 // console.log(`4. setAvailable: ${JSON.stringify(prods.setAvailable("true",

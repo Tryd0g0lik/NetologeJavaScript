@@ -1,56 +1,78 @@
-import {inflate, inflateRaw} from "zlib";
+// import {inflate, inflateRaw} from "zlib";
 
 function lessMore(
     arr:any,
     less: boolean = false,
     more: boolean = false,
-    name: string,
-    word:string,
+    word:string = null,
     len: number,
-    ){
-    /* Params:  'arr' : Array<Array<any>> -    this's an array wich be get  with a outside arrays  insert.
+    ) {
+    /* Params:  'arr' : Array<Array<any>> -    this's an array which been get  with a outside arrays  insert.
                 'less' or/and
                 'more' : charaster '<' or '>' - this's determines, at value a length 'word' is the more
                 than a 'len' or not.
 
-                'name' : type string    -       this's property title, length wich  we want to define.
                 'word' : type string -          this's simbol's set.
                 'len' type number -             this's integer which defining a word length.
     */
-    interface Result{
-        __id: number;
-        __prop: string;
-    }
 
-    let __result: Array<Array<Result>> = [];
 
-    if (less === true) {
-       const __response = arr.filter((word, length, name) => {
-           for (let __i = 0; __i < arr.length; __i++){
-               if(String(arr[__i].name).length < len) {
 
-                   let __res = [arr[__i].id, String(arr[__i].name)]
-                   __result.push(__res)
-               }
-           }
-           return __result
+    let __nameAll: string[] = [];
+    let __result: Array<string> = [];
+    let __str2:any;
+    let __i:number;
 
-        })
-        // console.log(`lessMore: ${lessMore}`)
-        return __response
-    }else if (more === true) {
-        const __response = arr.filter((word, length, name) => {
-            for (let __i = 0; __i < arr.length; __i++) {
-                if (String(arr[__i].name).length > len) {
+    /* ------Start datarmination at the word length------ */
 
-                    let __res = [arr[__i].id, String(arr[__i].name)]
-                    __result.push(__res)
-                }
+    /*
+     This's a filter. Here is determined the string length
+        and return the strings list if  length is fulfilling
+     requirement of the selection
+     */
+    try {
+        for (let __i = 0; __i < arr.length; __i++) {
+            __str2 = new RegExp(String(arr[__i].name))
+
+            if (__str2.test(String(__nameAll)) !== true){
+
+                __nameAll.push(String(arr[__i].name))
+
+
             }
-            return __result
-        });
-        // __response = arr.filter(name => name.length > len)
-        return __response
+        }
+
+        if (less !== false &&
+            more === false) {
+            for (__i=0; __i < __nameAll.length; __i++) {
+
+                if (Number((__nameAll[__i]).length) < Number(len)) {
+                    __result.push(__nameAll[__i]);
+                }
+
+
+            }
+        } else if (more != false &&
+            less == false) {
+
+            for (__i=0; __i < __nameAll.length; __i++) {
+
+                if (Number((__nameAll[__i]).length) > Number(len)) {
+                    __result.push(__nameAll[__i]);
+                }
+
+
+            }
+        }
+        return __result
+
+
+    } catch (e){
+        console.log(`ERROR of "lessMore" message: ${e.message} /=> Line ${e.line}`)
+        console.log(`STACK: ${e.stack}`)
     }
+    /* ------End datarmination at the word length------ */
 }
-module.exports = {lessMore}
+
+
+module.exports = {lessMore};

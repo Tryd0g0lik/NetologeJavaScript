@@ -12,9 +12,6 @@ class GoodsList extends Good {
         this.sortDir = sortDirs;
         this.lenResponse = null;
     }
-    // getFile(loader: string|object= f){
-    //     return super.getFile(loader=f)
-    // }
     addProducts(__newData = null, path) {
         // добавление товара в базу
         let fs = require('fs');
@@ -64,9 +61,11 @@ class GoodsList extends Good {
             let __el;
             let __arr = (__f['products']);
             let __ind = 0;
-            let __response;
-            if (ids != null && name == null && symbolWord === 0 &&
-                filtLengthLess == false && filtLengthMore == false) {
+            let __response = [];
+            let __result = [];
+            const __lenArray = __arr.length;
+            if (ids !== null && name === null && symbolWord === 0 &&
+                filtLengthLess === false && filtLengthMore === false) {
                 for (__el of (Array(__arr)[__i])) {
                     if (__el.id === ids) {
                         return (__el);
@@ -74,8 +73,8 @@ class GoodsList extends Good {
                     __i++;
                 }
             }
-            else if (name != null && ids == null && symbolWord === 0 &&
-                filtLengthLess == false && filtLengthMore == false) {
+            else if (name !== null && ids === null && symbolWord === 0 &&
+                filtLengthLess === false && filtLengthMore === false) {
                 for (__el of (Array(__arr)[__i])) {
                     if (__el.name === name) {
                         return (__el);
@@ -83,31 +82,32 @@ class GoodsList extends Good {
                     __i++;
                 }
             }
-            else if (filtLengthLess == true && filtLengthMore == false ||
-                filtLengthLess == false && filtLengthMore == true) {
-                for (__ind; __ind < __arr.length; __ind++) {
-                    let __name = __arr[__ind].name;
-                    if (symbolWord != 0) {
-                        __response = fun.lessMore(__arr, filtLengthLess, filtLengthMore, symbolWord);
-                        console.log(`__response: ${__response}`);
+            else if (filtLengthLess === true && filtLengthMore === false ||
+                filtLengthLess === false && filtLengthMore === true) {
+                /* ------Start datarmination at the word length------ */
+                /*
+                Here we get a string's list from variable '__response'
+                 and return Arrays list where has these strings.
+                 */
+                __response = fun.lessMore(__arr, filtLengthLess, filtLengthMore, null, symbolWord);
+                for (__i = 0; __i < __lenArray; __i++) { // The lisr of JSON Arrays
+                    for (__ind = 0; __ind < __response.length; __ind++) {
+                        if (String(__arr[__i].name) === String((__response)[__ind])) {
+                            __result.push([__arr[__i].id, __arr[__i]]);
+                        }
                     }
-                    else {
-                        return "You need refine a number for symbols count";
-                    }
-                    console.log(`__response: ${__response}`);
                 }
+                return __result;
+                /* ------End datarmination at the word length------ */
             }
-            else if (filtLengthLess == true && filtLengthMore == true) {
+            else if (filtLengthLess === true && filtLengthMore === true) {
                 return "Repeat the filter. Choose the 'filtLengthLess' or 'filtLengthMore'.";
             }
         }
         catch (e) {
-            let __err = `Error: massage ${e.message}`;
+            let __err = `ErroR: massagE ${e.message} /=> ${e.stack}`;
             return __err;
         }
-    }
-    filtrProducts() {
-        // фильтр по 1.наименованию, 2.id, 3. длина имени товара, 4. присутствие слова в имени.
     }
 }
 const prods = new GoodsList(null, 'Пирожок', 'LA-LA-LA-LA', 1050, 1355, false, ' ', false, false);
@@ -121,8 +121,7 @@ console.clear();
 // console.log( " ")
 // console.log( " ")
 console.log(`3. findProducts: ${setTimeout(() => {
-    console.log(JSON.stringify(prods.findProducts(1, null, './root.json',
-        true, false, 3)));
+    console.log(JSON.stringify(prods.findProducts(1, null, './root.json', true, false, 6)));
 }, 1000)}`);
 console.log(" ");
 console.log(" ");
