@@ -53,8 +53,15 @@ class GoodsList extends Good {
         }
     }
     findProducts(ids = null, name = null, path, filtLengthLess = false, filtLengthMore = false, symbolWord = 0) {
-        // фильтр товара
-        // фильтр по 1.наименованию, 2.id, 3. длина имени товара, 4. присутствие слова в имени.
+        /*
+        TODO: Search/filter by a 'name' product, 'id' prodect and length product;
+        Atributes:  'ids'   - this's index product;
+                    'name'  - this's a name product;
+                    'filtLengthLess'  and 'filtLengthMore' by default is equal to the 'false'. If equal
+                    'true' then search go by word length - less or more;
+
+                    'symbolWord'    - this's integer for orientation on the word length.
+         */
         try {
             let __f = (super.getFile(path));
             let __i = 0;
@@ -66,21 +73,25 @@ class GoodsList extends Good {
             const __lenArray = __arr.length;
             if (ids !== null && name === null && symbolWord === 0 &&
                 filtLengthLess === false && filtLengthMore === false) {
+                /* The search by 'id' - START */
                 for (__el of (Array(__arr)[__i])) {
                     if (__el.id === ids) {
                         return (__el);
                     }
                     __i++;
                 }
+                /* The search by 'id' - END */
             }
             else if (name !== null && ids === null && symbolWord === 0 &&
                 filtLengthLess === false && filtLengthMore === false) {
+                /* The search by name product - START */
                 for (__el of (Array(__arr)[__i])) {
                     if (__el.name === name) {
                         return (__el);
                     }
                     __i++;
                 }
+                /* The search by name product - END */
             }
             else if (filtLengthLess === true && filtLengthMore === false ||
                 filtLengthLess === false && filtLengthMore === true) {
@@ -99,8 +110,7 @@ class GoodsList extends Good {
                 }
                 return __result;
                 /* ------End datarmination at the word length------ */
-            }
-            else if (filtLengthLess === true && filtLengthMore === true) {
+            } else if (filtLengthLess === true && filtLengthMore === true) {
                 return "Repeat the filter. Choose the 'filtLengthLess' or 'filtLengthMore'.";
             }
         }
@@ -121,7 +131,7 @@ console.clear();
 // console.log( " ")
 // console.log( " ")
 console.log(`3. findProducts: ${setTimeout(() => {
-    console.log(JSON.stringify(prods.findProducts(1, null, './root.json', true, false, 6)));
+    console.log(JSON.stringify(prods.findProducts(1, null, './root.json', false, true, 6)));
 }, 1000)}`);
 console.log(" ");
 console.log(" ");

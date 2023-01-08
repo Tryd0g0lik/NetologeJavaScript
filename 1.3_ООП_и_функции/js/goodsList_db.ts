@@ -101,8 +101,17 @@ class GoodsList extends Good{
                  filtLengthLess:boolean = false,
                  filtLengthMore:boolean = false,
                  symbolWord: number=0): string{
-        // фильтр товара
-        // фильтр по 1.наименованию, 2.id, 3. длина имени товара, 4. присутствие слова в имени.
+
+        /*
+        TODO: Search/filter by a 'name' product, 'id' prodect and length product;
+        Atributes:  'ids'   - this's index product;
+                    'name'  - this's a name product;
+                    'filtLengthLess'  and 'filtLengthMore' by default is equal to the 'false'. If equal
+                    'true' then search go by word length - less or more;
+
+                    'symbolWord'    - this's integer for orientation on the word length.
+         */
+
         try {
             let __f: string | object = (super.getFile(path));
             let __i: number = 0;
@@ -115,14 +124,17 @@ class GoodsList extends Good{
 
             if (ids !== null && name === null && symbolWord === 0 &&
                 filtLengthLess === false &&  filtLengthMore === false){
+                /* The search by 'id' - START */
                 for (__el of (Array(__arr)[__i])) {
                     if (__el.id === ids) {
                         return (__el)
                     }
                     __i++
                 }
+                /* The search by 'id' - END */
             } else if (name !== null && ids === null && symbolWord === 0 &&
                 filtLengthLess === false &&  filtLengthMore === false) {
+                /* The search by name product - START */
 
                 for (__el of (Array(__arr)[__i])) {
                     if (__el.name === name) {
@@ -130,8 +142,10 @@ class GoodsList extends Good{
                     }
                     __i++
                 }
+                /* The search by name product - END */
             } else if (filtLengthLess === true && filtLengthMore === false ||
                 filtLengthLess === false && filtLengthMore === true){
+
 
                 /* ------Start datarmination at the word length------ */
                 /*
@@ -157,7 +171,7 @@ class GoodsList extends Good{
                 return __result
                 /* ------End datarmination at the word length------ */
 
-            }else if (filtLengthLess === true && filtLengthMore === true){
+            } else if (filtLengthLess === true && filtLengthMore === true){
                 return "Repeat the filter. Choose the 'filtLengthLess' or 'filtLengthMore'."
             }
 
