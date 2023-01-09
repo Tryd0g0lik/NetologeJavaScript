@@ -20,6 +20,9 @@ class BasketGood extends Good{
         this.amount = amount;
     }
 
+    getBasketFile(){
+        return JSON.parse(fs.readFileSync("./bascetAmount.json"))
+    }
     bascet(i:number, count:number){
         this.amount = count;
         try {
@@ -29,7 +32,7 @@ class BasketGood extends Good{
                 if (__f["products"][__i].id === i) {
 
                     let __prod = __f["products"][__i];
-                    let __count = JSON.parse(fs.readFileSync("./bascetAmount.json"));
+                    let __count = this.getBasketFile();
 
                     __prod["amount"] = this.amount;
                     if (checkId(__count["bascetCount"], i) === true) {
@@ -59,8 +62,8 @@ class BasketGood extends Good{
 
 
 
-console.clear()
-const prod = new  BasketGood();
+// console.clear()
+// const prod = new  BasketGood();
+// console.log(prod.bascet(5, 3))
 
-
-console.log(prod.bascet(5, 3))
+module.exports = {BasketGood}

@@ -7,6 +7,9 @@ class BasketGood extends Good {
         super(id, names, descriptions, sizes, prices, availbles);
         this.amount = amount;
     }
+    getBasketFile() {
+        return JSON.parse(fs.readFileSync("./bascetAmount.json"));
+    }
     bascet(i, count) {
         this.amount = count;
         try {
@@ -14,7 +17,7 @@ class BasketGood extends Good {
             for (let __i = 0; __i < (__f["products"]).length; __i++) {
                 if (__f["products"][__i].id === i) {
                     let __prod = __f["products"][__i];
-                    let __count = JSON.parse(fs.readFileSync("./bascetAmount.json"));
+                    let __count = this.getBasketFile();
                     __prod["amount"] = this.amount;
                     if (checkId(__count["bascetCount"], i) === true) {
                         (__count["bascetCount"]).push(__prod);
@@ -42,4 +45,4 @@ class BasketGood extends Good {
 }
 console.clear();
 const prod = new BasketGood();
-console.log(prod.bascet(27, 7));
+console.log(prod.bascet(2, 3));

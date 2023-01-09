@@ -16,6 +16,7 @@ function sorting(obj) {
         for (__i; __i < obj.length; __i++) {
             __result.push([obj[__i][1].prices, obj[__i][1]]);
         }
+        console.log(`prices: ${__result}`);
         return __result;
     }
     catch (e) {
