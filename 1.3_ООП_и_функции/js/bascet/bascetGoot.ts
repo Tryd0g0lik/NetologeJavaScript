@@ -43,7 +43,7 @@ class BasketGood extends Good{
                                 console.log(`ERRORE 'bascet' Message: ${err.message}`);
                                 console.log(`ERRORE 'bascet' Stack: ${err.stack}`);
                             } else {
-                                console.log("Rewrite the file!");
+                                console.log("Rewrite the file! Ok" );
                             }
                         });
                     } else {
