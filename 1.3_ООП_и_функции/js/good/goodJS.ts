@@ -6,6 +6,14 @@ class Good extends Main{
     constructor(id = 0, names, descriptions, sizes = 0, prices = 0, availbles = false) {
         super(id, names, descriptions, sizes, prices, availbles);
     }
+    /*
+    'setAvailableRemove'    - The product activation  been made through a way to replace  the value 'valueBoolen' on
+                                the 'true'. 'valueBoolen' be default.
+                            - The product find can by the 'id' or 'name' product.
+                            - the "remove" function works if an attribute value change  of 'false' to 'true' /=> 'remove=true' .
+                                Work go with a JSON files and instead of 'remove()', 'replace()' is used/
+
+     */
 
      getFile(path: string= null){
         let __data: any = fs.readFileSync(path);
@@ -18,13 +26,6 @@ class Good extends Main{
                  name:string|null=null,
                  path: string,
                  remove: boolean = false) {
-        //1. Активация товара путем замены 'valueBoolen' на значение 'true'.
-         // Работа проходит с единичным товаром/объектом. Работато со списком товара не
-         // получится.
-        // 2. Найти товар возможно через 'ID' или 'name'-наименование товара.
-
-        // 3. remove() работает если 'remove=true'. Но т.к. работа проводится с форматом JSON,
-        // а не DOM, вместо 'remove()' используется 'replice()'
 
         let __i: number = 0;
         let __ind: number = 0;

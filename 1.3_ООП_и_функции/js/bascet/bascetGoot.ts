@@ -24,6 +24,10 @@ class BasketGood extends Good{
         return JSON.parse(fs.readFileSync("./bascetAmount.json"))
     }
     bascet(i:number, count:number){
+        /*
+        The amount items insert
+         */
+
         this.amount = count;
         try {
             let __f = JSON.parse(fs.readFileSync("./root.json"));

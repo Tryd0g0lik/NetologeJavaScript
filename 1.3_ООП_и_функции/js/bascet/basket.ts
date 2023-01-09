@@ -111,6 +111,7 @@ class Basket extends Good {
             }
         } catch (e){}
     }
+
 }
 const prod = new Basket()
 console.log(prod.totalAmount("./bascetAmount.json"));
