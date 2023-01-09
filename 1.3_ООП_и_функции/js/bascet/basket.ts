@@ -88,6 +88,29 @@ class Basket extends Good {
             console.log(`ERRORE in  Basket a "totalSum". Stack: ${e.stack }`);
         }
     }
+
+    clear(path:string){
+        try {
+
+
+            if (path) {
+
+                fs.writeFile(path,
+                    JSON.stringify({"totalPrices":[]}),
+                    "utf-8", (err)=> {
+                        if (err) {
+                            console.log(`WriteFile ERRORE in  clear a "totalAmount". Message: ${err.message} `);
+                            console.log(`WriteFile ERRORE in  clear a "totalAmount". Stack: ${err.stack}`);
+                        } else {
+                            console.log("Cleared! Ok");
+                        }
+
+                    });
+
+
+            }
+        } catch (e){}
+    }
 }
 const prod = new Basket()
 console.log(prod.totalAmount("./bascetAmount.json"));
