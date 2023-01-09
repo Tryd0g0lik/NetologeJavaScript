@@ -13,7 +13,7 @@ class Basket extends Good {
          */
         return JSON.parse(fs.readFileSync(path));
     }
-    totalAmount(path = null) {
+    totalAmount(path) {
         /*
         The total price calculate;
          */
@@ -47,6 +47,24 @@ class Basket extends Good {
             console.log(`ERRORE in  Basket a "totalAmount". Stack: ${e.stack}`);
         }
     }
+    totalSum(path) {
+        /*
+        The Total items calculate
+         */
+        try {
+            let countItems = 0;
+            let __f = this.openFile(path);
+            for (let __i = 0; __i < __f["totalPrices"].length; __i++) {
+                countItems = countItems + Number(__f["totalPrices"][__i].amount);
+            }
+            return `Кол-во: ${countItems} шт.`;
+        }
+        catch (e) {
+            console.log(`ERRORE in  Basket a "totalSum". Message: ${e.message}`);
+            console.log(`ERRORE in  Basket a "totalSum". Stack: ${e.stack}`);
+        }
+    }
 }
 const prod = new Basket();
 console.log(prod.totalAmount("./bascetAmount.json"));
+console.log(setTimeout(prod.totalSum("./totalAmountBasket.json"), 1000));
