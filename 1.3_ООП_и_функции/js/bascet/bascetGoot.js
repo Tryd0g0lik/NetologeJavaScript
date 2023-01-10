@@ -13,6 +13,8 @@ class BasketGood extends Good {
     bascet(i, count) {
         /*
         The amount items insert
+        Params: 'i' - index;
+                'count' - The total count .
          */
         this.amount = count;
         try {
