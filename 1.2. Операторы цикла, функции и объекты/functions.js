@@ -1,4 +1,10 @@
+/*
+На вход подаем массив с цифрами которые имею дубли в этом же массиве.
+В коде прописано условие которое на выход не должно подавать массив с дублями.
 
+После запуска, на выходе получаем массив целый чисел.
+По какой причине учловие которое не должно допускать дубли, выполняется частично?
+ */
 function cycles(arr=[], integ=0){
 
 	let __tr = true;
@@ -21,8 +27,15 @@ function cycles(arr=[], integ=0){
 			}
 			if (__nList.length === 2 ){
 				if (!(arr[__i] in __lists)){
-					__lists.push(Number(arr[__i]));
 
+					__lists.push(Number(arr[__i]));
+					if (integ !== 0 &&
+					__lists.length === integ){
+						console.log('И все таки оно делится!')
+						console.log("__lists: " + __lists)
+						return __lists
+
+					}
 
 				}
 			}
@@ -43,6 +56,6 @@ function cycles(arr=[], integ=0){
 }
 
 console.clear();
-let integ = 3;
+let integ = 0;
 let arr = [ 2, 3, 5, 7, 11, 13, 14, 17, 24, 28, 30, 2, 3, 5, 7, 11, 13]
-cycles(arr)
+cycles(arr, integ)
