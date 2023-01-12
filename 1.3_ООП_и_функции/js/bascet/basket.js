@@ -1,3 +1,4 @@
+
 const { Good } = require("../good/goodJS");
 const fs = require("fs");
 class Basket extends Good {
