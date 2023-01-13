@@ -19,7 +19,7 @@ class GoodsList extends Good{
         filter,
         sortPrices = false,
         sortDirs = false,
-        ){
+        ) {
         super(
             id,
             names,
@@ -34,7 +34,7 @@ class GoodsList extends Good{
         this.sortDir = sortDirs;
         this.__lenResponse = null;
 
-    Ъ
+    }
 
 
     getProducts(): void {
