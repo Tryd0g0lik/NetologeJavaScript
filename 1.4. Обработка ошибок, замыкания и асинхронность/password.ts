@@ -1,37 +1,29 @@
-/*
-Task 1
-Функция должна принимать один параметр - правильное значение пароля.
-Функция должна быть реализована с помощью замыкания таким образом,
-чтобы после получения проверяющей функции невозможно было каким-либо образом узнать правильный пароль.
 
-Возвращаемая функция проверки пароля должно принимать один параметр - пароль, введенный пользователем
-для проверки. В качестве результата функция должна возвращать логическое значение true или false в
-зависимости от результата проверки.
-
-В основном коде программы напишите тестовые вызовы для getPasswordChecker и для проверочной функции,
-чтобы убедиться в корректности их работы.
-
-------------
-Как читать
- */
 declare function require(name:string);
-const rl = require('node:readline');
-const fs = require("fs");
+// const readline = require('readline');
 const vsprintf = require('sprintf-js').vsprintf;
 
-let data;
-const pass = async (pasw:string)=>{
-    return await fs.promises.readFile('./user.json', 'utf-8')
+// const result = require('dotenv').config({path: "./.env"}) //.env
+// const psw = result.parsed['PASS'];
+
+
+function getPassword(password:string):any {
+
+
+    return function getPasswordChecker():boolean{
+        let __psw:string = "12335";
+
+        if (password === __psw){
+            console.log("Код правильный")
+            return true
+        } else {
+            console.log("Код не правильный")
+            return false
+        }
+
+    }
 }
 
-let p:string = "12333"
+const psw = getPassword("456");
+console.log(vsprintf("%s",[psw]))
 
-pass(p)
-    .then((data)=>{
-        let __result =  JSON.parse(data)
-        let __boolenResult = (p === vsprintf("%s",[__result['PASS'],]));
-        return __boolenResult
-    })
-    .then((data)=>{
-        console.log(data)
-    })
