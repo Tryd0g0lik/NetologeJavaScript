@@ -1,3 +1,4 @@
+=========== Здание не завершено ===========
 const vsprintf = require('sprintf-js').vsprintf;
 const fspr = require("fs/promises");
 const readline = require('readline');
