@@ -208,13 +208,3 @@ function getUserInt(path:string){
 
 }
 
-let __game = true;
-
-( async ()=> {
-    let __answered = await rl.question("We play? 'y'(yes) or 'n'(not)\n ");
-
-
-    console.log(`__answered: ${__answered}`)
-    __game = false
-})()
-    // getUserInt("./cook.json")
