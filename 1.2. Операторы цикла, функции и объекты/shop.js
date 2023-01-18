@@ -78,12 +78,12 @@ function addProducts(newData = null, catalog) {
 
 
     for (const [key, value] of Object.entries(catalog)) {
-
         for (let elem in catalog[String(key)]) { //
+            console.log(elem +" " + Number(newData['id']))
             if (Number(elem['id']) === Number(newData['id'])) {
                 return "Rewrite the 'id'";
 
-            } else {
+            } else if (Number(elem['id']) !== Number(newData['id'])){
                 (catalog[String(key)]).push(newData);
 
             }
@@ -141,11 +141,12 @@ function getBasketCatalog(i, count) { // basketCatalog {}
      */
     let amount = count;
 
-    for (let i = 0; i < (f["products"]).length; i++) {
-        if (f["products"][i].id === i) {
+    for (let ind = 0; ind < (f["products"]).length; ind++) {
+        if (Number(f["products"][ind].id) === Number(i)) {
 
-            f["products"][i]["amount"] = amount;
-            basketCatalog = addProducts(f["products"][i], JSON.parse(basketCatalog))
+            f["products"][ind]["amount"] = amount;
+            // basketCatalog = addProducts(f["products"][i], JSON.parse(basketCatalog))
+            basketCatalog = addProducts(f["products"][i], basketCatalog)
         }
     }
     return basketCatalog
@@ -242,3 +243,5 @@ function clear(catalog) { // ./totalAmountBasket.json
 
 const catol = getCatalog(0,"Пирожок","LA-LA-LU-LU",1050,1355,"true")
 // console.log(catol)
+const basketAdd = getBasketCatalog(5, 85)
+console.log(basketAdd)
