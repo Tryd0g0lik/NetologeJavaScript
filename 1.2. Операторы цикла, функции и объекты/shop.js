@@ -16,47 +16,6 @@ let f = {"products":[
     {"id":11,"name":"Клюква","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"false"},
     ]}
 
-function __checkId(arrBascet = [], i) {
-    /*
-    TODO: the id number is checked in the catalog
-    Params: 'arrBascet' - this's array of objects.
-     */
-
-    for (let ind = 0; ind < arrBascet.length; ind++) {
-        if (Number(i) === Number(arrBascet[ind].id)) {
-            console.log(i);
-            console.log(arrBascet[ind].id);
-            console.log("--------");
-            return false;
-        }
-    }
-    return true;
-}
-
-
-// function mainProperties() {
-//     /*
-//      This's basic properties
-//      */
-//     let id;
-//     let name;
-//     let description;
-//     let size;
-//     let price;
-//     let availble;
-//     let totalpriceALL;
-//
-//     return {
-//         id : 0,
-//         name : null,
-//         description : null,
-//         size : 0,
-//         price : 0,
-//         availble : "false",
-//         totalpriceALL : 0,
-//     }
-// }
-
 let id;
 let name;
 let description;
@@ -74,19 +33,15 @@ function addProducts(newData = null, catalog) {
     Params: -   'newData' this's object, new position for a catalog.
             -   'catalog' this's array, the one of three shop's catalogs where add a new product. The format Jason's
              object
-
      */
 
     let lis = [];
 
     for (const [key, value] of Object.entries(catalog)) {
         lis = catalog[String(key)];
-
     }
 
     for (let ind = 0; ind < (lis).length; ind++){
-
-
         if (Number(lis[ind]['id']) === Number(newData['id'])) {
             return "Rewrite the 'id'. This id is in the cart ";
 
@@ -114,9 +69,6 @@ function getCatalog(
         len = id;
     }
 
-    //Создайте в коде несколько (не менее 5) товаров в каталоге и несколько (не менее 2) товаров в корзине.
-
-
     // Добавление товара в каталог
     let newData = {
         "id": len,
@@ -127,7 +79,6 @@ function getCatalog(
         "avaibles": availble,
     };
 
-    // let catJSN = JSON.parse(f);
     let catJSN = f;
 
     f = addProducts(newData, catJSN);
@@ -150,8 +101,6 @@ function getBasketCatalog(i, count) { // basketCatalog {}
         if (Number(f["products"][ind].id) === Number(i)) {
 
             f["products"][ind]["amount"] = amount;
-            // basketCatalog = addProducts(f["products"][i], JSON.parse(basketCatalog))
-            // console.log(basketCatalog)
             basketCatalog = addProducts(f["products"][i], basketCatalog)
         }
     }
@@ -197,13 +146,12 @@ function totalSum(getTotalAmounts) {
      */
 
     let path = getTotalAmounts["bascetCount"];
-
-
     let countItems = 0;
-    if (path) {
 
+    if (path) {
         for (let i = 0; i < path.length; i++) {
             countItems = countItems + Number(path[i]['amount']);
+
         }
         return `Кол-во: ${countItems} шт.`;
     }
@@ -218,7 +166,6 @@ function removeBasket(basketName, i){
      */
     let ind = 0;
     for ( let prod of basketName["bascetCount"]){
-
         if (Number(prod['id'] ) === Number(i)){
 
             basketName["bascetCount"].splice(ind, 1)
