@@ -76,22 +76,24 @@ function addProducts(newData = null, catalog) {
 
      */
 
+    let lis = [];
 
     for (const [key, value] of Object.entries(catalog)) {
+        lis = catalog[String(key)];
 
-        for (let elem in JSON.parse(catalog[String(key)])) { //
-            console.log(elem)
-            if (Number(elem['id']) === Number(newData['id'])) {
-                return "Rewrite the 'id'";
+    }
 
-            } else if (Number(elem['id']) !== Number(newData['id'])){
-                (catalog[String(key)]).push(newData);
+    for (let ind = 0; ind < (lis).length; ind++){
 
-            }
-            return catalog;
+
+        if (Number(lis[ind]['id']) === Number(newData['id'])) {
+            return "Rewrite the 'id'. This id is in the cart ";
 
         }
     }
+    lis.push(newData);
+    return catalog;
+
 }
 function getCatalog(
     id=0,
@@ -126,6 +128,7 @@ function getCatalog(
 
     // let catJSN = JSON.parse(f);
     let catJSN = f;
+
     f = addProducts(newData, catJSN);
     return f
 }
@@ -147,6 +150,7 @@ function getBasketCatalog(i, count) { // basketCatalog {}
 
             f["products"][ind]["amount"] = amount;
             // basketCatalog = addProducts(f["products"][i], JSON.parse(basketCatalog))
+            // console.log(basketCatalog)
             basketCatalog = addProducts(f["products"][i], basketCatalog)
         }
     }
@@ -168,7 +172,8 @@ function getTotalAmount(getBasketCatalogs) { // bascetAmount {}
     let totalpriceALL = 0;
 
 
-    let basketCatalog = JSON.parse(getBasketCatalogs);
+    // let basketCatalog = JSON.parse(getBasketCatalogs);
+    let basketCatalog = getBasketCatalogs;
 
 
     // fBaskets["bascetCount"] = this.removeUnavailable(fBaskets["bascetCount"]);
@@ -180,7 +185,7 @@ function getTotalAmount(getBasketCatalogs) { // bascetAmount {}
 
         totalprice = (basketCatalog["bascetCount"][i]['prices'] * basketCatalog["bascetCount"][i]['amount']);
         basketCatalog["bascetCount"][i]["totalprice"] = totalprice; // it's object for pay
-        (Array(bascetAmount)["bascetCount"]).push(basketCatalog["bascetCount"][i]) // all catalo/basket for pay
+        (bascetAmount["bascetCount"]).push(basketCatalog["bascetCount"][i]) // all catalo/basket for pay
 
     }
 
@@ -242,7 +247,11 @@ function clear(catalog) { // ./totalAmountBasket.json
 
 }
 
-const catol = getCatalog(0,"Пирожок","LA-LA-LU-LU",1050,1355,"true")
+// const catol = getCatalog(120,"Пирожок","LA-LA-LU-LU",1050,1355,"true")
 // console.log(catol)
-const basketAdd = getBasketCatalog(5, 85)
+
+const basketAdd = getBasketCatalog(11, 85)
 // console.log(basketAdd)
+
+const getTAmount = getTotalAmount(basketAdd)
+console.log(getTAmount)
