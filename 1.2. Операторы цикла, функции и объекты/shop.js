@@ -64,7 +64,8 @@ let size;
 let price;
 let availble;
 let totalpriceALL;
-let basketCatalog = {"bascetCount": [{"id":1,"name":"Пирожок Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"prices":1355,"avaibles":"true","amount":3}, {"id":5,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"prices":1355,"avaibles":"false","amount":3}]};
+let basketCatalog = {"bascetCount": [{"id":1,"name":"Пирожок Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaibles":"true","amount":3},
+        {"id":5,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaibles":"false","amount":3}]};
 let bascetAmount = {"bascetCount" : []};
 function addProducts(newData = null, catalog) {
     /*
@@ -170,23 +171,15 @@ function getTotalAmount(getBasketCatalogs) { // bascetAmount {}
     let i;
     let totalprice;
     let totalpriceALL = 0;
-
-
-    // let basketCatalog = JSON.parse(getBasketCatalogs);
     let basketCatalog = getBasketCatalogs;
-
-
-    // fBaskets["bascetCount"] = this.removeUnavailable(fBaskets["bascetCount"]);
-
 
     for (i = 0; i < (basketCatalog["bascetCount"]).length ||
         i === 0 &&
         basketCatalog["bascetCount"] !== []; i++) {
 
-        totalprice = (basketCatalog["bascetCount"][i]['prices'] * basketCatalog["bascetCount"][i]['amount']);
+        totalprice = (Number(basketCatalog["bascetCount"][i]['price']) * Number(basketCatalog["bascetCount"][i]['amount']));
         basketCatalog["bascetCount"][i]["totalprice"] = totalprice; // it's object for pay
         (bascetAmount["bascetCount"]).push(basketCatalog["bascetCount"][i]) // all catalo/basket for pay
-
     }
 
     for (i = 0; i < (bascetAmount["bascetCount"]).length; i++) {
@@ -223,22 +216,21 @@ function removeBasket(basketName, i){
     Params: 'basketName'    - The basket name.
             'i'             - This's product index for a remove it
      */
-    basketName = JSON.parse(basketName);
-    for ( let prod in basketName["bascetCount"]){
-        if (basketName["bascetCount"]['id'] === i){
+    let ind = 0;
+    for ( let prod of basketName["bascetCount"]){
 
-            basketName["bascetCount"] = basketName["bascetCount"].splice(i, 1)
+        if (Number(prod['id'] ) === Number(i)){
+
+            basketName["bascetCount"].splice(ind, 1)
             return basketName
         }
+        ind++
     }
 }
 function clear(catalog) { // ./totalAmountBasket.json
     /*
     TODO: cleaning the basket
      */
-
-    catalog = JSON.parse(catalog);
-
     if (catalog["bascetCount"] !== []) {
         catalog["bascetCount"] = [];
 
@@ -247,11 +239,28 @@ function clear(catalog) { // ./totalAmountBasket.json
 
 }
 
-// const catol = getCatalog(120,"Пирожок","LA-LA-LU-LU",1050,1355,"true")
-// console.log(catol)
+console.log("------ 1 ------")
+const catol = getCatalog(120,"Пирожок","LA-LA-LU-LU",1050,1355,"true")
+console.log(catol)
 
+console.log("------ 2 ------")
 const basketAdd = getBasketCatalog(11, 85)
-// console.log(basketAdd)
+console.log(basketAdd)
 
+console.log("------ 3 ------")
 const getTAmount = getTotalAmount(basketAdd)
-console.log(getTAmount)
+console.log(getTAmount[0])
+
+console.log("------ 4 ------")
+const totalSums = totalSum(getTAmount[0])
+console.log(totalSums + " и " + getTAmount[1])
+
+console.log("------ 5 ------")
+const remove = removeBasket(getTAmount[0], 11)
+console.log(remove)
+
+console.log("------ 6 ------")
+const clearing = clear(basketAdd)
+console.log(clearing)
+
+console.log("------ 7 ------")
