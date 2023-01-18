@@ -135,26 +135,23 @@ function getTotalAmount(getBasketCatalogs) { // bascetAmount {}
         totalpriceALL = Number(totalpriceALL) + Number(basketCatalog["bascetCount"][i]["totalprice"]); // total price
 
     }
-    return [bascetAmount, `${totalpriceALL} рубля;`];
 
-}
-
-function totalSum(getTotalAmounts) {
     /*
-    The Total items calculate.
+    Below code.
     Params: 'getTotalAmounts'   - this's resul of work a 'getTotalAmount' function. it's 'getTotalAmount()[0]'
      */
 
-    let path = getTotalAmounts["bascetCount"];
+    let path = bascetAmount["bascetCount"];
     let countItems = 0;
 
-    if (path) {
-        for (let i = 0; i < path.length; i++) {
-            countItems = countItems + Number(path[i]['amount']);
 
-        }
-        return `Кол-во: ${countItems} шт.`;
+    for (let i = 0; i < path.length; i++) {
+        countItems = countItems + Number(path[i]['amount']);
+
     }
+
+    return [bascetAmount, `${totalpriceALL} рубля;`, `Кол-во: ${countItems} шт.`];
+
 
 }
 
@@ -194,17 +191,17 @@ console.log("------ 2 ------")
 const basketAdd = getBasketCatalog(11, 85)
 console.log(basketAdd)
 
+
 console.log("------ 3 ------")
 const getTAmount = getTotalAmount(basketAdd)
 console.log(getTAmount[0])
 
 console.log("------ 4 ------")
-const totalSums = totalSum(getTAmount[0])
-console.log(totalSums + " и " + getTAmount[1])
+console.log(getTAmount[1])
+
 
 console.log("------ 5 ------")
-const remove = removeBasket(getTAmount[0], 11)
-console.log(remove)
+console.log(getTAmount[2])
 
 console.log("------ 6 ------")
 const clearing = clear(basketAdd)
