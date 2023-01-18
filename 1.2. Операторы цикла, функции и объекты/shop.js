@@ -78,8 +78,9 @@ function addProducts(newData = null, catalog) {
 
 
     for (const [key, value] of Object.entries(catalog)) {
-        for (let elem in catalog[String(key)]) { //
-            console.log(elem +" " + Number(newData['id']))
+
+        for (let elem in JSON.parse(catalog[String(key)])) { //
+            console.log(elem)
             if (Number(elem['id']) === Number(newData['id'])) {
                 return "Rewrite the 'id'";
 
@@ -244,4 +245,4 @@ function clear(catalog) { // ./totalAmountBasket.json
 const catol = getCatalog(0,"Пирожок","LA-LA-LU-LU",1050,1355,"true")
 // console.log(catol)
 const basketAdd = getBasketCatalog(5, 85)
-console.log(basketAdd)
+// console.log(basketAdd)
