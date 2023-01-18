@@ -131,7 +131,8 @@ function getTotalAmount(getBasketCatalogs) { // bascetAmount {}
         (bascetAmount["bascetCount"]).push(basketCatalog["bascetCount"][i]) // all catalo/basket for pay
     }
 
-    for (i = 0; i < (bascetAmount["bascetCount"]).length; i++) {
+
+    for (i = 0; i < (basketCatalog["bascetCount"]).length; i++) {
         totalpriceALL = Number(totalpriceALL) + Number(basketCatalog["bascetCount"][i]["totalprice"]); // total price
 
     }
@@ -151,8 +152,6 @@ function getTotalAmount(getBasketCatalogs) { // bascetAmount {}
     }
 
     return [bascetAmount, `${totalpriceALL} рубля;`, `Кол-во: ${countItems} шт.`];
-
-
 }
 
 function removeBasket(basketName, i){
@@ -183,12 +182,13 @@ function clear(catalog) { // ./totalAmountBasket.json
 
 }
 
+console.log("------ A ------")
 console.log("------ 1 ------")
 const catol = getCatalog(120,"Пирожок","LA-LA-LU-LU",1050,1355,"true")
 console.log(catol)
 
 console.log("------ 2 ------")
-const basketAdd = getBasketCatalog(11, 85)
+const basketAdd = getBasketCatalog(110, 85)
 console.log(basketAdd)
 
 
@@ -204,7 +204,42 @@ console.log("------ 5 ------")
 console.log(getTAmount[2])
 
 console.log("------ 6 ------")
-const clearing = clear(basketAdd)
-console.log(clearing)
+// const clearing = clear(basketAdd) См. Стр. 241
+// console.log(clearing)
 
 console.log("------ 7 ------")
+const rem = removeBasket(getTAmount[0], 5)
+console.log(rem)
+console.log("< ================= >")
+console.log()
+console.log()
+
+
+console.log("------ B ------")
+console.log("------ 1 ------")
+const catol1 = getCatalog(121,"Пирожок","LA-LA-LU-LU",1050,1355,"true")
+console.log(catol1)
+
+console.log("------ 2 ------")
+const basketAdd1 = getBasketCatalog(600, 85)
+console.log(basketAdd1)
+
+
+console.log("------ 3 ------")
+const getTAmount1 = getTotalAmount(basketAdd1)
+console.log(getTAmount1[0])
+
+console.log("------ 4 ------")
+console.log(getTAmount1[1])
+
+
+console.log("------ 5 ------")
+console.log(getTAmount1[2])
+
+
+console.log("------ 6 ------")
+const clearing1 = clear(basketAdd1)
+console.log(clearing1)
+
+console.log("------ 7 ------")
+const rem1 = removeBasket(getTAmount1[0], 5)
