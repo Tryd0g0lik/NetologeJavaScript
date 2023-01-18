@@ -1,7 +1,7 @@
 /*
 Задача 2
  */
-const f = {"products":[
+let f = {"products":[
     {"id":0,"name":"Торт","descriptions":"ля-ля-ля Тортище","sizes":100,"price":12,"avaible":"true"},
     {"id":1,"name":"Пирожок Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"true"},
     {"id":2,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"false"},
@@ -14,8 +14,7 @@ const f = {"products":[
     {"id":9,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"true"},
     {"id":10,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"false"},
     {"id":11,"name":"Клюква","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"false"},
-    ]
-}
+    ]}
 
 function __checkId(arrBascet = [], i) {
     /*
@@ -65,7 +64,7 @@ let size;
 let price;
 let availble;
 let totalpriceALL;
-let basketCatalog = {"bascetCount": []};
+let basketCatalog = {"bascetCount": [{"id":1,"name":"Пирожок Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"prices":1355,"avaibles":"true","amount":3}, {"id":5,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"prices":1355,"avaibles":"false","amount":3}]};
 let bascetAmount = {"bascetCount" : []};
 function addProducts(newData = null, catalog) {
     /*
@@ -106,7 +105,7 @@ function getCatalog(
     let len;
 
     if (id === 0) {
-        len = JSON.parser(f["products"]).length;
+        len = (f["products"]).length;
     } else {
         len = id;
     }
@@ -124,8 +123,9 @@ function getCatalog(
         "avaibles": availble,
     };
 
-    let catJSN = JSON.parse(f);
-    let f = addProducts(newData, catJSN);
+    // let catJSN = JSON.parse(f);
+    let catJSN = f;
+    f = addProducts(newData, catJSN);
     return f
 }
 
@@ -239,3 +239,6 @@ function clear(catalog) { // ./totalAmountBasket.json
     return catalog
 
 }
+
+const catol = getCatalog(0,"Пирожок","LA-LA-LU-LU",1050,1355,"true")
+// console.log(catol)
