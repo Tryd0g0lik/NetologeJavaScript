@@ -366,10 +366,9 @@ class Basket extends Good {
 
                 for (let [key, val] of Object.entries(value)) this.catalogName = key;
                 this.result = value[this.catalogName].reduce((sum, curr) => {
-
                     return (Number(sum) + (Number(curr['price']) * Number(curr['amount'])));
                 });
-
+                console.log(this.result)
                 return this.result
             },
 
