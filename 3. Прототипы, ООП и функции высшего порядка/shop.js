@@ -321,9 +321,7 @@ class BasketGood extends Good{
 class Basket extends Good {
     constructor() {
         super()
-        this.result = null;
-        this.catalogName = null;
-        this.quantity = [' Руб.', ' Общее кол-во']
+
         // this.id = id;
         // this.title = title;
         // this.description = description;
@@ -334,37 +332,44 @@ class Basket extends Good {
 
         // this.product = [{"id": this.id, "title": this.title, "descriptions": this.description, "sizes": this.size, "price": this.price, "available": this.available}, this.amount]
         // this.totalQuantity = null;
-    }
 
 
-    //  При реализации геттеров используйте методы массивов, такие как reduce() и forEach().
+        //  При реализации геттеров используйте методы массивов, такие как reduce() и forEach().
 
+        this.total ={
+            result: null,
+            catalogName: null,
+            quantity: [' Руб.', ' Общее кол-во'],
 
-    set totalAmount(value){
+            set totalAmount(value){
 
-        for (let [key, val] of Object.entries(value)) this.catalogName = key;
-        this.result = value[this.catalogName].reduce((sum, curr) => {
-            return Number(sum) + Number(curr['amount'])
-        }, 0);
-    }
-    get totalAmount(){ //   возвращает общую стоимость товаров в корзине
-        console.log([this.result, this.quantity[1]])
-        return [this.result, this.quantity[1]]
-    }
+                for (let [key, val] of Object.entries(value)) this.catalogName = key;
+                this.result = value[this.catalogName].reduce((sum, curr) => {
+                    return Number(sum) + Number(curr['amount'])
+                }, 0);
+            },
 
-    set totalSum(value){
-        this.catalogName = null;
-        this.result = null;
+            get totalAmount(){ //   возвращает общую стоимость товаров в корзине
+                console.log([this.result, this.quantity[1]])
+                return [this.result, this.quantity[1]]
+            },
 
-        for (let [key, val] of Object.entries(value)) this.catalogName = key;
-        this.result = value[this.catalogName].reduce((sum, curr) => {
-            return Number(sum) + (Number(curr['price']) * Number(curr['amount']));
-        });
-    }
-    get totalSum(){ //  возвращает общее количество товаров в корзине
-        console.log([this.result, this.quantity[0]])
-        return [this.result, this.quantity[0]]
+            set totalSum(value){
+                this.catalogName = null;
+                this.result = null;
 
+                for (let [key, val] of Object.entries(value)) this.catalogName = key;
+                this.result = value[this.catalogName].reduce((sum, curr) => {
+                    return Number(sum) + (Number(curr['price']) * Number(curr['amount']));
+                });
+            },
+
+            get totalSum() { //  возвращает общее количество товаров в корзине
+                console.log([this.result, this.quantity[0]])
+                return [this.result, this.quantity[0]]
+
+            },
+        }
     }
     add(good, amount){ //       Добавляет товар в корзину, если товар уже есть увеличивает количество
         // this.basket.fulling = this.product;
