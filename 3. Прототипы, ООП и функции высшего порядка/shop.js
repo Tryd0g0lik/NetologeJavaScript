@@ -260,6 +260,7 @@ class BasketGood extends Good{
              */
             id: this.id,
             inBasket: null,
+
             catalogPositName: (catalog)=> {
                 /*
                     TODO: The dynamic catalog.
@@ -336,37 +337,45 @@ class Basket extends Good {
 
         //  При реализации геттеров используйте методы массивов, такие как reduce() и forEach().
 
-        this.total ={
+        this.totalQuantity = {
             result: null,
             catalogName: null,
-            quantity: [' Руб.', ' Общее кол-во'],
+            quantity: ' Общее кол-во',
 
-            set totalAmount(value){
+            set totalAmount(value) {
 
                 for (let [key, val] of Object.entries(value)) this.catalogName = key;
                 this.result = value[this.catalogName].reduce((sum, curr) => {
                     return Number(sum) + Number(curr['amount'])
                 }, 0);
+
+                return this.result
             },
 
-            get totalAmount(){ //   возвращает общую стоимость товаров в корзине
-                console.log([this.result, this.quantity[1]])
-                return [this.result, this.quantity[1]]
+            get totalAmount() { //   возвращает общую стоимость товаров в корзине
+                return [this.result, this.quantity]
             },
+        }
+
+        this.totalSum ={
+            result: null,
+            catalogName: null,
+            quantity: ' Руб.',
 
             set totalSum(value){
-                this.catalogName = null;
-                this.result = null;
 
                 for (let [key, val] of Object.entries(value)) this.catalogName = key;
                 this.result = value[this.catalogName].reduce((sum, curr) => {
+                    console.log(sum)
                     return Number(sum) + (Number(curr['price']) * Number(curr['amount']));
                 });
+                console.log(this.result)
+                return this.result
             },
 
             get totalSum() { //  возвращает общее количество товаров в корзине
                 console.log([this.result, this.quantity[0]])
-                return [this.result, this.quantity[0]]
+                return [this.result, this.quantity]
 
             },
         }
@@ -414,8 +423,9 @@ console.clear()
 // prod.addQuantity(f)
 
 let totalBasket = new Basket();
-totalBasket.totalAmount = b;
-totalBasket.totalSum = b;
 
-console.log(JSON.stringify(totalBasket.totalAmount));
-console.log(JSON.stringify(totalBasket.totalSum));
+totalBasket.totalQuantity.totalAmount = b;
+totalBasket.totalSum.totalSum = b;
+
+console.log(JSON.stringify(totalBasket.totalQuantity.totalAmount));
+console.log(JSON.stringify(totalBasket.totalSum.totalSum));
