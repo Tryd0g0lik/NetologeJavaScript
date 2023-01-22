@@ -2,244 +2,415 @@
 Задача 2
  */
 let f = {"products":[
-    {"id":0,"name":"Торт","descriptions":"ля-ля-ля Тортище","sizes":100,"price":12,"avaible":"true"},
-    {"id":1,"name":"Пирожок Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"true"},
-    {"id":2,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"false"},
-    {"id":3,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"false"},
-    {"id":4,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"false"},
-    {"id":5,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"false"},
-    {"id":6,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"false"},
-    {"id":7,"name":"Сироп","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"true"},
-    {"id":8,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"true"},
-    {"id":9,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"true"},
-    {"id":10,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"false"},
-    {"id":11,"name":"Клюква","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaible":"false"},
+    {"id":0,"title":"Торт","descriptions":"ля-ля-ля Тортище","sizes":100,"price":12,"available":true},
+    {"id":1,"title":"Пирожок Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
+    {"id":2,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":false},
+    {"id":3,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":false},
+    {"id":4,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
+    {"id":5,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":false},
+    {"id":6,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":false},
+    {"id":7,"title":"Сироп","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
+    {"id":8,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
+    {"id":9,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
+    {"id":10,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
+    {"id":11,"title":"Клюква","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":false},
     ]}
 
-let id;
-let name;
-let description;
-let size;
-let price;
-let availble;
-let totalpriceALL;
-let basketCatalog = {"bascetCount": [{"id":1,"name":"Пирожок Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaibles":"true","amount":3},
-        {"id":5,"name":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"avaibles":"false","amount":3}]};
-let bascetAmount = {"bascetCount" : []};
-function addProducts(newData = null, catalog) {
-    /*
-    TODO: The position will be added into catalog after checks. It will checked the 'id' number id presence or be not
-      presence this number into  catalog.
-    Params: -   'newData' this's object, new position for a catalog.
-            -   'catalog' this's array, the one of three shop's catalogs where add a new product. The format Jason's
-             object
-     */
+class Good {
+    #catalogName = null;
+    constructor(id=0, title, description, size=[],
+                price=1, available=0) {
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.size = size;
+    this.price = price;
+    this.available = available;
+    // this.totalpriceALL = totalpriceALL;
 
-    let lis = [];
-
-    for (const [key, value] of Object.entries(catalog)) {
-        lis = catalog[String(key)];
     }
+    setAvailable(catalog, idList, numb) { // изменение признака доступности для продажи
+       /*
+         Params: 'catalog',
+                  'copyCatalog' -   this is JSON's object .
 
-    for (let ind = 0; ind < (lis).length; ind++){
-        if (Number(lis[ind]['id']) === Number(newData['id'])) {
-            return "Rewrite the 'id'. This id is in the cart ";
+                'idList'      -     this is list with a position numbers/id.
+                'numb'   -     these are properties, availability level '0' , '1'.
+       */
 
+        let available = this.available     ;
+        this.#catalogName = null;
+
+        for (const [key, value] of Object.entries(catalog)){
+            this.#catalogName = String(key);
+        }
+        let copyCatalog ={catalogName : []}
+
+        for (let elem in catalog[catalogName]){
+            for (let numb in idList) {
+
+                if (elem['id'] === Number(numb) &&
+                    !(elem['available'] === numb)) {
+
+                    elem['available'] = numb;
+                    copyCatalog['catalogName'].push(elem);
+                } else {
+                    copyCatalog['catalogName'].push(elem);
+                }
+            }
+        }
+
+        return copyCatalog
+    }
+}
+
+class GoodsList extends Good {
+    // - класс для хранения каталога товаров со свойствами:
+    // Для фильтрации и сортировки используйте функции массивов filter и sort с передачей в них соответствующих стрелочных функций
+    #goods = null;              // массив экземпляров объектов класса Good (приватное поле)
+    #catalogName = null;        // Согласно статье:
+
+    // https://bobbyhadz.com/blog/javascript-private-field-must-be-declared-in-enclosing-class
+    constructor(sortP = false, sortD=false) {
+
+        super( 0, null, null,[],
+            1, false)
+
+        this.#goods = (catalog) => {
+            let l = [];
+            for (let [key, value] of Object.entries(catalog)) {
+                this.#catalogName = key;
+            }
+
+            for (let ele in catalog[String(this.#catalogName)]) {
+                if (ele['available'] === true) {
+                    l.push(ele['available'])
+                }
+            }
+
+            return l
+        };
+
+        this.sortD = sortD;
+
+        this.sort = {
+            /*
+            TODO: HEre is sorting of the products list .
+            Params: 'catalog'   - The final product which exit from here.
+                    'sortPrice' - This parameter is for run up and run out the sorting.
+                    'sortDir'   - This's a sorts from zero to max and reverse.
+                'catalogName'   - The catalog's title => "{catalogName : []}"
+                        'l'     - The position after sorting  go into common list.
+             */
+
+            catalog: null,
+            sortPrice: sortP,   //  включения сортировки по полю Price
+            sortDir: this.sortD,     //    направления сортировки по полю Price (true - по возрастанию, false - по убыванию)
+            filters : new RegExp(/(^([А-Я]{1}[А-Яа-яa-z0-9]+) ?([А-Яа-яa-z0-9])*\S?\s?([а-яa-z0-9]+)* ?([-_ ])? ?[а-яa-z0-9]*[а-яa-z0-9$]?)/),
+            catalogName: null,
+            l: [],
+            elemCatalog: (thisList)=>{
+                this.catalog = {'sorted' : []}
+                for(let elem of thisList){
+                    this.catalog['sorted'].push(elem[1])
+                }
+                return this.catalog
+            },
+
+            set sortList(value){
+                /*
+                    Params: 'value: Array'
+                 */
+                // = copyCatalog //  возвращает массив доступных для
+                // продажи товаров в соответствии с
+                // установленным
+
+                    // Для проверки соответствия поля name регулярному выражению в фильтре, используйте такую конструкцию
+                    // filter.test(good.title). При этом в поле filter должно быть записано регулярное выражение, описываемое в JS как:
+                    // /<regexp>/<flags>
+
+
+
+                for (let [key, val] of Object.entries(value)) {
+                    this.catalogtitle = key;
+                }
+
+                for (let elem of (value[String(this.catalogName)]).filter(item => item.price > 0)){
+                    this.l.push([Number(elem.price), elem])
+                }
+
+                for (let elem of this.l) {
+                    if (elem[1]['available'] === true &&
+                        this.sortDir === false &&
+                        (this.filters.test(elem[1]['title'])) === true) {
+
+                        (this.l).sort((a, b) => {
+                            if (a[0] > b[0]) return 1;
+                            if (a[0] === b[0]) return 0;
+                            if (a[0] < b[0]) return -1
+                        });
+
+                    } else if (elem[1]['available'] === true &&
+                        this.sortDir === true &&
+                        (this.filters.test(elem[1]['title'])) === true){
+
+                        (this.l).sort((a, b) => {
+                            if (a[0] < b[0]) return 1;
+                            if (a[0] === b[0] ) return  0;
+                            if (a[0] > b[0]) return -1
+                        })
+                    }
+                }
+
+                this.catalog = this.elemCatalog(this.l)
+
+            },
+
+            get sortList(){
+                return this.catalog
+            }
         }
     }
-    lis.push(newData);
-    return catalog;
 
-}
-function getCatalog(
-    id=0,
-    name, description,
-    size, price,
-    availble,
-
-    ) {
-    /*
-    Тhe  shop basket
-     */
-    let len;
-
-    if (id === 0) {
-        len = (f["products"]).length;
-    } else {
-        len = id;
+    sorts(catalogs){
+        /*
+        TODO: It 's for a product sorting. Read the description from a 'this.sort' property
+         */
+       this.sort.sortList = catalogs;
+       return this.sort.sortList
     }
 
-    // Добавление товара в каталог
-    let newData = {
-        "id": len,
-        "name": name,
-        "descriptions": description,
-        "sizes": size,
-        "prices": price,
-        "avaibles": availble,
-    };
 
-    let catJSN = f;
+    add(newData = null, catalog) {
+        /*
+        TODO: The position will be added into catalog.
+        Params: -   'newData' - this's object, new position for a catalog.
+                    'newData'   - {id, title, descriptions, sizes, prices, avaibles,
+                    'catalog'   -   this is JSON's object .
+        };
 
-    f = addProducts(newData, catJSN);
-    return f
-}
+         */
 
 
-// Реализуйте функции добавления товара в корзину
-function getBasketCatalog(i, count) { // basketCatalog {}
-    /*
-    TODO: The amount items insert. Need the find product index from 'f' catalog and to append the 'cont' properties,
-      it's integer.
-    Params: 'i' - product index of catalog;
-            'count' - The total count .
-            'basketCatalog' -   Thi is catalog from the basket, it's 'f' array.
-     */
-    let amount = count;
 
-    for (let ind = 0; ind < (f["products"]).length; ind++) {
-        if (Number(f["products"][ind].id) === Number(i)) {
+        for (let [key, value] of Object.entries(catalog)){
+            this.#catalogName = key;
 
-            f["products"][ind]["amount"] = amount;
-            basketCatalog = addProducts(f["products"][i], basketCatalog)
         }
-    }
-    return basketCatalog
-}
 
-
-// Реализуйте функцию вычисления общего количества и стоимости товаров в корзине
-function getTotalAmount(getBasketCatalogs) { // bascetAmount {}
-    /*
-    TODO: The total price calculate.
-    Params: 'totalprice'    - this total price an one product of basket.
-            'totalpriceALL' - this total price all product of basket.
-            'basketCatalogs'- this's result work of 'basketCatalogs' function. it's object for pay
-     */
-
-    let i;
-    let totalprice;
-    let totalpriceALL = 0;
-    let basketCatalog = getBasketCatalogs;
-
-    for (i = 0; i < (basketCatalog["bascetCount"]).length ||
-        i === 0 &&
-        basketCatalog["bascetCount"] !== []; i++) {
-
-        totalprice = (Number(basketCatalog["bascetCount"][i]['price']) * Number(basketCatalog["bascetCount"][i]['amount']));
-        basketCatalog["bascetCount"][i]["totalprice"] = totalprice; // it's object for pay
-        (bascetAmount["bascetCount"]).push(basketCatalog["bascetCount"][i]) // all catalo/basket for pay
-    }
-
-
-    for (i = 0; i < (basketCatalog["bascetCount"]).length; i++) {
-        totalpriceALL = Number(totalpriceALL) + Number(basketCatalog["bascetCount"][i]["totalprice"]); // total price
-
-    }
-
-    /*
-    Below code.
-    Params: 'getTotalAmounts'   - this's resul of work a 'getTotalAmount' function. it's 'getTotalAmount()[0]'
-     */
-
-    let path = bascetAmount["bascetCount"];
-    let countItems = 0;
-
-
-    for (let i = 0; i < path.length; i++) {
-        countItems = countItems + Number(path[i]['amount']);
-
-    }
-
-    return [bascetAmount, `${totalpriceALL} рубля;`, `Кол-во: ${countItems} шт.`];
-}
-
-function removeBasket(basketName, i){
-    /*
-    TODO: The one product is removes of the basket
-    Params: 'basketName'    - The basket name.
-            'i'             - This's product index for a remove it
-     */
-    let ind = 0;
-    for ( let prod of basketName["bascetCount"]){
-        if (Number(prod['id'] ) === Number(i)){
-
-            basketName["bascetCount"].splice(ind, 1)
-            return basketName
+        let len = catalog[String(this.#catalogName)].length;
+        let i = 0;
+        for (let elem in catalog[String(this.#catalogName)]) {
+            if (catalog[String(this.#catalogName)][i]['id'] === len)
+                return "Rewrite the 'id'";
+            i++;
         }
-        ind++
+
+        newData = {
+            id: len,
+            title: this.title,
+            description: this.description,
+            sizes: this.size,
+            prices: this.price,
+            avaibles: this.available     ,
+        };
+
+        (catalog[String(this.#catalogName)]).push(newData);
+        return catalog
+    }
+
+    remove(id, catalog) { //  удаление товара из каталога по его id
+        /*
+        TODO: to remove one iem at a time.
+        Params: 'catalog'   -   this is JSON's object .
+
+         */
+        for (let [key, volue] of Object.entries(catalog)){
+            this.#catalogName = key;
+        }
+
+        let i = 0;
+        for (let elem in catalog[String(this.#catalogName)]){
+            if (Number(elem['id']) === Number(id)){
+                catalog[String(this.#catalogName)].splice(i, 1);
+            }
+            i++
+        }
+
+        return catalog;
     }
 }
-function clear(catalog) { // ./totalAmountBasket.json
+
+class BasketGood extends Good{
     /*
-    TODO: cleaning the basket
+        TODO: For a one product/position here will be adding the count/quantity and that's all/end
+        Params: 'amount'    - the product quantity.
+            'fullBasket'    - the product's list of the basket.
      */
-    if (catalog["bascetCount"] !== []) {
-        catalog["bascetCount"] = [];
+    //   для хранения данных о товаре в корзине с дополнительным свойством:
+    //  (товар помещаемый в корзину),
+    constructor(id, amount){
+        super(id)
 
+        this.goods = {"Basket " : []}; //   массив объектов класса BasketGood для хранения данных о товарах в корзине
+        this.positionCheck = {
+            /*
+                TODO: made a dynamic function under any directory. After taking the id position and checking the
+                  index, we send the position to the basket/
+             */
+            id: this.id,
+            inBasket: null,
+            catalogPositName: (catalog)=> {
+                /*
+                    TODO: The dynamic catalog.
+                 */
+
+                for (let [key, val] of Object.entries(catalog)) return key
+            },
+            set fullBasket(catalog){
+                /*
+                    TODO: Checking the position
+                 */
+
+                for (let elem of catalog[this.catalogPositName(catalog)]){
+                    if (elem['id'] === this.id) this.inBasket = elem; }
+            },
+
+            get fullBasket(){
+                return this.inBasket
+            }
+
+        }
+
+        this.product = [null , null];
+        this.basket = {
+            /*
+                TODO: The basket fulling. Position after the check and plus quantity
+             */
+            amount: amount, //    количество товара в корзин
+            fullBasket: {'BasketGood': []},
+
+            set fulling(value){
+                if (value[0]['available'] === true) {
+
+                    value[0]['amount'] = value[1];
+                    this.fullBasket['BasketGood'].push(value[0])
+                    return this.fullBasket
+                }
+            },
+
+            get fulling(){
+                return this.fullBasket
+            }
+
+        };
     }
-    return catalog
 
+    addQuantity(catalogName){
+        /*
+            Params: 'catalogName'   -the catalog name;
+         */
+        this.positionCheck.fullBasket = catalogName
+        this.product = [this.positionCheck.fullBasket, this.basket.amount]
+
+        this.basket.fulling = this.product
+        return this.basket.fulling
+    }
 }
 
-console.log("------ A ------")
-console.log("------ 1 ------")
-const catol = getCatalog(120,"Пирожок","LA-LA-LU-LU",1050,1355,"true")
-console.log(catol)
+class Basket extends Good {
+    constructor() {
+        super()
+        this.result = null;
+        this.catalogName = null;
+        this.quantity = [' Руб.', ' Общее кол-во']
+        // this.id = id;
+        // this.title = title;
+        // this.description = description;
+        // this.size = size;
+        // this.price = price;
+        // this.available = available;
+        // this.amount = amount;
 
-console.log("------ 2 ------")
-const basketAdd = getBasketCatalog(110, 85)
-console.log(basketAdd)
-
-
-console.log("------ 3 ------")
-const getTAmount = getTotalAmount(basketAdd)
-console.log(getTAmount[0])
-
-console.log("------ 4 ------")
-console.log(getTAmount[1])
-
-
-console.log("------ 5 ------")
-console.log(getTAmount[2])
-
-console.log("------ 6 ------")
-// const clearing = clear(basketAdd) См. Стр. 241
-// console.log(clearing)
-
-console.log("------ 7 ------")
-const rem = removeBasket(getTAmount[0], 5)
-console.log(rem)
-console.log("< ================= >")
-console.log()
-console.log()
+        // this.product = [{"id": this.id, "title": this.title, "descriptions": this.description, "sizes": this.size, "price": this.price, "available": this.available}, this.amount]
+        // this.totalQuantity = null;
+    }
 
 
-console.log("------ B ------")
-console.log("------ 1 ------")
-const catol1 = getCatalog(121,"Пирожок","LA-LA-LU-LU",1050,1355,"true")
-console.log(catol1)
-
-console.log("------ 2 ------")
-const basketAdd1 = getBasketCatalog(600, 85)
-console.log(basketAdd1)
+    //  При реализации геттеров используйте методы массивов, такие как reduce() и forEach().
 
 
-console.log("------ 3 ------")
-const getTAmount1 = getTotalAmount(basketAdd1)
-console.log(getTAmount1[0])
+    set totalAmount(value){
 
-console.log("------ 4 ------")
-console.log(getTAmount1[1])
+        for (let [key, val] of Object.entries(value)) this.catalogName = key;
+        this.result = value[this.catalogName].reduce((sum, curr) => {
+            return Number(sum) + Number(curr['amount'])
+        }, 0);
+    }
+    get totalAmount(){ //   возвращает общую стоимость товаров в корзине
+        console.log([this.result, this.quantity[1]])
+        return [this.result, this.quantity[1]]
+    }
+
+    set totalSum(value){
+        this.catalogName = null;
+        this.result = null;
+
+        for (let [key, val] of Object.entries(value)) this.catalogName = key;
+        this.result = value[this.catalogName].reduce((sum, curr) => {
+            return Number(sum) + (Number(curr['price']) * Number(curr['amount']));
+        });
+    }
+    get totalSum(){ //  возвращает общее количество товаров в корзине
+        console.log([this.result, this.quantity[0]])
+        return [this.result, this.quantity[0]]
+
+    }
+    add(good, amount){ //       Добавляет товар в корзину, если товар уже есть увеличивает количество
+        // this.basket.fulling = this.product;
+        // console.log(`3: ${JSON.stringify(this.basket.fulling)}`)
+        // return
+    }
+
+    remove(good, amount){ //    Уменьшает количество товара в корзине, если количество становится равным нулю, товар удаляется
+
+    }
+    clear(){ //                  Очищает содержимое корзины
+
+    }
+    removeUnavailable(){ //       Удаляет из корзины товары, имеющие признак available === false (использовать filter())
+
+    }
+}
+/*
+    Вызовите несколько раз реализованные методы этих объектов с необходимыми аргументами, устанавливая условия
+    фильтрации и сортировки для GoodsList. Выведите в консоль отфильтрованный и сортированный каталог товаров, а
+    также значения общих суммы и количества товаров в корзине.
+ */
 
 
-console.log("------ 5 ------")
-console.log(getTAmount1[2])
+// let resp = new GoodsList(true, true);
 
+let b = {"totalBasket":[
+    {"id":0,"title":"Торт","descriptions":"ля-ля-ля Тортище","sizes":100,"price":12,"available":true, 'amount': 15},
+    {"id":1,"title":"Пирожок Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 19},
+    {"id":4,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 21},
+    {"id":7,"title":"Сироп","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 1},
+    {"id":8,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 5},
+    {"id":9,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 150},
+    {"id":10,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 3},
+    ]}
 
-console.log("------ 6 ------")
-const clearing1 = clear(basketAdd1)
-console.log(clearing1)
+console.clear()
+// let g = resp.sorts(f)
+// console.log("_______>"+ JSON.stringify(g))
 
-console.log("------ 7 ------")
-const rem1 = removeBasket(getTAmount1[0], 5)
+// let prod = new BasketGood(10, 17)
+// prod.addQuantity(f)
+
+let totalBasket = new Basket();
+totalBasket.totalAmount = b;
+totalBasket.totalSum = b;
+
+console.log(JSON.stringify(totalBasket.totalAmount));
+console.log(JSON.stringify(totalBasket.totalSum));
