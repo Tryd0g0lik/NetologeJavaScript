@@ -1,7 +1,7 @@
 /*
 Задача 2
  */
-let f = {"products":[
+let f = {"products":[ // total db
     {"id":0,"title":"Торт","descriptions":"ля-ля-ля Тортище","sizes":100,"price":12,"available":true},
     {"id":1,"title":"Пирожок Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
     {"id":2,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":false},
@@ -13,9 +13,18 @@ let f = {"products":[
     {"id":8,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
     {"id":9,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
     {"id":10,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
-    {"id":11,"title":"Клюква","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":false},
+    {"id":11,"title":"Клюква","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
     ]}
 
+let b = {"totalBasket":[ // the list product from the basket
+    {"id":0,"title":"Торт","descriptions":"ля-ля-ля Тортище","sizes":100,"price":12,"available":true, 'amount': 15},
+    {"id":1,"title":"Пирожок Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 19},
+    {"id":4,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 21},
+    {"id":7,"title":"Сироп","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 1},
+    {"id":8,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 5},
+    {"id":9,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 150},
+    {"id":10,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 3},
+    ]}
 class Good {
     #catalogName = null;
     constructor(id=0, title, description, size=[],
@@ -241,37 +250,37 @@ class GoodsList extends Good {
     }
 }
 
-class BasketGood extends Good{
-    /*
-        TODO: For a one product/position here will be adding the count/quantity and that's all/end
-        Params: 'amount'    - the product quantity.
+class BasketGood extends Good{ //   для хранения данных о товаре в корзине с дополнительным свойством:
+    //  (товар помещаемый в корзину),
+
+
+    constructor(id, amount){
+         /*
+        TODO: For a one product/position here will be adding the count/quantity and that's all/end.
+          this.positionCheck'   -made a dynamic function under any directory. After taking the id position and.
+          checking the index, we send the position to the basket.
+         'set/get fullBasket'   -Checking the position on presence in the catalog.
+         'catalogPositName'     - The dynamic catalog.
+         'basket'               - The basket fulling. One position after the check and plus quantity.
+
+     Params: 'catalog'   - it's total product catalog from the all db-shop or of the Basket
+             'amount'    - the product quantity.
             'fullBasket'    - the product's list of the basket.
      */
-    //   для хранения данных о товаре в корзине с дополнительным свойством:
-    //  (товар помещаемый в корзину),
-    constructor(id, amount){
         super(id)
 
         this.goods = {"Basket " : []}; //   массив объектов класса BasketGood для хранения данных о товарах в корзине
-        this.positionCheck = {
-            /*
-                TODO: made a dynamic function under any directory. After taking the id position and checking the
-                  index, we send the position to the basket/
-             */
+        this.positionCheck = { //
+
             id: this.id,
             inBasket: null,
 
             catalogPositName: (catalog)=> {
-                /*
-                    TODO: The dynamic catalog.
-                 */
 
                 for (let [key, val] of Object.entries(catalog)) return key
             },
             set fullBasket(catalog){
-                /*
-                    TODO: Checking the position
-                 */
+
 
                 for (let elem of catalog[this.catalogPositName(catalog)]){
                     if (elem['id'] === this.id) this.inBasket = elem; }
@@ -285,9 +294,7 @@ class BasketGood extends Good{
 
         this.product = [null , null];
         this.basket = {
-            /*
-                TODO: The basket fulling. Position after the check and plus quantity
-             */
+
             amount: amount, //    количество товара в корзин
             fullBasket: {'BasketGood': []},
 
@@ -320,21 +327,16 @@ class BasketGood extends Good{
 }
 
 class Basket extends Good {
-    constructor() {
-        super()
-
-        // this.id = id;
-        // this.title = title;
-        // this.description = description;
-        // this.size = size;
-        // this.price = price;
-        // this.available = available;
-        // this.amount = amount;
-
-        // this.product = [{"id": this.id, "title": this.title, "descriptions": this.description, "sizes": this.size, "price": this.price, "available": this.available}, this.amount]
-        // this.totalQuantity = null;
-
-
+    constructor(id=null) {
+        /*
+        Params:     'add()':
+                    'id'    - it is 'id' of the first position found.
+                    'good'  - It's one position or one product of the total catalog.
+                    'b'     - This all catalog from the basket which has an "'available'=true" and "'amount'>0"
+                    'f'     - It's total catalog from the db-shop.
+                    'onePositionOfBasket'  -this is one position for what to add to the Basket.
+         */
+        super(id, )
         //  При реализации геттеров используйте методы массивов, такие как reduce() и forEach().
 
         this.totalQuantity = {
@@ -357,35 +359,106 @@ class Basket extends Good {
             },
         }
 
-        this.totalSum ={
+        this.totalSum = {
             result: null,
             catalogName: null,
             quantity: ' Руб.',
 
             set totalSum(value){
-
                 for (let [key, val] of Object.entries(value)) this.catalogName = key;
                 this.result = value[this.catalogName].reduce((sum, curr) => {
-                    return (Number(sum) + (Number(curr['price']) * Number(curr['amount'])));
-                });
-                console.log(this.result)
+                    return Number(sum) + (Number(curr['price']) * Number(curr['amount']));
+                }, 0);
+
                 return this.result
             },
 
             get totalSum() { //  возвращает общее количество товаров в корзине
-                console.log([this.result, this.quantity[0]])
                 return [this.result, this.quantity]
 
             },
         }
     }
-    add(good, amount){ //       Добавляет товар в корзину, если товар уже есть увеличивает количество
-        // this.basket.fulling = this.product;
-        // console.log(`3: ${JSON.stringify(this.basket.fulling)}`)
-        // return
+    add(id, amount){ //       Добавляет товар в корзину, если товар уже есть увеличивает количество
+
+        this.amount = amount;
+        this.id = id;
+        let onePositionOfBasket = null;
+        let basket = new BasketGood(this.id, this.amount);
+
+        onePositionOfBasket = b['totalBasket'].find((item, i, array) => Number(item['id']) === Number(this.id)); // db from
+                                                                                            // the bascket/ for so that the find the one position
+
+        if (onePositionOfBasket !== null &&
+            onePositionOfBasket !== undefined) onePositionOfBasket['amount'] = Number(onePositionOfBasket['amount']) + Number(this.amount);
+
+        if (onePositionOfBasket !== null &&
+            onePositionOfBasket !== undefined) {
+            let i = 0;
+            for (let elem in b['totalBasket']) { // for a remove one position and add the too same position with
+                                                // inave the quantity 'amount'.
+                if (Number(elem['id']) === Number(onePositionOfBasket['id'])) b['totalBasket'].splice(i, 1).push(onePositionOfBasket);
+                i++;
+            }
+        }
+
+        if (onePositionOfBasket === null || // Adding new position eith amount in total the llist Basket's product.
+            onePositionOfBasket === undefined) {
+
+            basket.positionCheck.fullBasket = f; // checking the position on presence in the catalog
+            let good = basket.positionCheck.fullBasket;
+            let position = new BasketGood(good['id'], this.amount);
+
+            position.basket.fulling = [good, this.amount]
+            b['totalBasket'].push((position.basket.fulling['BasketGood'][0]));
+        }
+
+        return b
     }
 
-    remove(good, amount){ //    Уменьшает количество товара в корзине, если количество становится равным нулю, товар удаляется
+    remove(id, amount){ //    Уменьшает количество товара в корзине, если количество становится равным нулю, товар удаляется
+        this.id = id;
+        this.amount = amount;
+
+        let position = new BasketGood(this.id, this.amount);
+
+        position.positionCheck.fullBasket = b;                       // the db getting from a Basket-shop.
+        let onePosition = position.positionCheck.fullBasket;
+        let catalogName = position.positionCheck.catalogPositName(b); // this's key's name which that getting  of
+                                                                      // the json's file.
+
+        if (onePosition !== undefined &&
+            onePosition !== null ){
+
+            let result = (Number(onePosition['amount']) - Number(this.amount));
+            let id = 0;
+
+            if (result <= 0){
+                for (let elem of  b[catalogName]){
+
+                    if (Number(elem['id']) === Number(this.id)) {
+                        b[catalogName].splice(id, 1); return b
+                    }
+                    id++
+                }
+
+            } else if ((Number(onePosition['amount']) - Number(this.amount)) > 0) {
+                onePosition['amount'] = (Number(onePosition['amount']) - Number(this.amount));
+
+                // let i = 0;
+                for (let elem of b[catalogName]){
+
+                    if (Number(elem['id']) === this) {
+                        b[catalogName].splice(id, 1, onePosition);
+                        return b
+                    }
+                    id++
+                }
+            }
+
+        } else {
+            console.log("ERROR: Sorry, We can't find that product's 'id' ")
+        }
 
     }
     clear(){ //                  Очищает содержимое корзины
@@ -404,15 +477,7 @@ class Basket extends Good {
 
 // let resp = new GoodsList(true, true);
 
-let b = {"totalBasket":[
-    {"id":0,"title":"Торт","descriptions":"ля-ля-ля Тортище","sizes":100,"price":12,"available":true, 'amount': 15},
-    {"id":1,"title":"Пирожок Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 19},
-    {"id":4,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 21},
-    {"id":7,"title":"Сироп","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 1},
-    {"id":8,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 5},
-    {"id":9,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 150},
-    {"id":10,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 3},
-    ]}
+
 
 console.clear()
 // let g = resp.sorts(f)
@@ -428,3 +493,11 @@ totalBasket.totalSum.totalSum = b;
 
 console.log(JSON.stringify(totalBasket.totalQuantity.totalAmount));
 console.log(JSON.stringify(totalBasket.totalSum.totalSum));
+
+// console.log(JSON.stringify(totalBasket.add()))
+
+console.log('add::')
+console.log(JSON.stringify(totalBasket.add(9, 105)))
+
+console.log('remove::')
+console.log(JSON.stringify(totalBasket.remove(1 , 2)))
