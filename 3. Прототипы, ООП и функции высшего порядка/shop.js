@@ -462,6 +462,10 @@ class Basket extends Good {
 
     }
     clear(){ //                  Очищает содержимое корзины
+        let catalogName = position.positionCheck.catalogPositName(b); // this's key's name which that getting  of
+                                                                  // the json's file.
+        b[catalogName] = [];
+        return b;
 
     }
     removeUnavailable(){ //       Удаляет из корзины товары, имеющие признак available === false (использовать filter())
@@ -501,3 +505,6 @@ console.log(JSON.stringify(totalBasket.add(9, 105)))
 
 console.log('remove::')
 console.log(JSON.stringify(totalBasket.remove(1 , 2)))
+
+console.log('clear::')
+console.log(JSON.stringify(totalBasket.clear()))
