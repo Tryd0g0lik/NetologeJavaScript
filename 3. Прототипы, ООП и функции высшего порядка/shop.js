@@ -335,6 +335,10 @@ class Basket extends Good {
                     'b'     - This all catalog from the basket which has an "'available'=true" and "'amount'>0"
                     'f'     - It's total catalog from the db-shop.
                     'onePositionOfBasket'  -this is one position for what to add to the Basket.
+
+                     'clear()'  - cleaning in Basket.
+                     'removeUnavailable()'  - In total list positions founds all position which has 'available ===
+                      false' end removed
          */
         super(id, )
         //  При реализации геттеров используйте методы массивов, такие как reduce() и forEach().
@@ -448,7 +452,7 @@ class Basket extends Good {
                 // let i = 0;
                 for (let elem of b[catalogName]){
 
-                    if (Number(elem['id']) === this) {
+                    if (Number(elem['id']) === this.id) {
                         b[catalogName].splice(id, 1, onePosition);
                         return b
                     }
@@ -462,14 +466,30 @@ class Basket extends Good {
 
     }
     clear(){ //                  Очищает содержимое корзины
-        let catalogName = position.positionCheck.catalogPositName(b); // this's key's name which that getting  of
-                                                                  // the json's file.
-        b[catalogName] = [];
+
+        b["totalBasket"] = [];
         return b;
 
     }
     removeUnavailable(){ //       Удаляет из корзины товары, имеющие признак available === false (использовать filter())
+        /*
+            removeUnavailable In total list positions founds all position which has 'available === false' end removed
+         */
+        let positions = b['totalBasket'].filter((item, i, array) => item['available'] === false );
 
+        for (let pos of positions) {
+            let i = 0;
+            for (let elem of b['totalBasket']){
+
+                if (Number(elem['id']) === pos['id']) {
+                    b['totalBasket'].splice(i, 1);
+                    continue;
+                }
+
+                i++
+            }
+        }
+        return b
     }
 }
 /*
@@ -484,27 +504,30 @@ class Basket extends Good {
 
 
 console.clear()
-// let g = resp.sorts(f)
-// console.log("_______>"+ JSON.stringify(g))
-
-// let prod = new BasketGood(10, 17)
-// prod.addQuantity(f)
-
 let totalBasket = new Basket();
 
+console.log()
 totalBasket.totalQuantity.totalAmount = b;
 totalBasket.totalSum.totalSum = b;
 
+console.log()
 console.log(JSON.stringify(totalBasket.totalQuantity.totalAmount));
 console.log(JSON.stringify(totalBasket.totalSum.totalSum));
 
 // console.log(JSON.stringify(totalBasket.add()))
 
+console.log()
 console.log('add::')
 console.log(JSON.stringify(totalBasket.add(9, 105)))
 
+console.log()
 console.log('remove::')
 console.log(JSON.stringify(totalBasket.remove(1 , 2)))
 
+console.log()
 console.log('clear::')
 console.log(JSON.stringify(totalBasket.clear()))
+
+console.log()
+console.log('removeUnavailable::')
+console.log(JSON.stringify(totalBasket.removeUnavailable()))
