@@ -27,53 +27,31 @@ let b = {"totalBasket":[ // the list product from the basket
     ]}
 class Good {
     #catalogName = null;
-    constructor(id=0, title, description, size=[],
-                price=1, available=0) {
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.size = size;
-    this.price = price;
-    this.available = available;
+    constructor() {
+    this.id = null;
+    this.title = null;
+    this.description = null;
+    this.size = null;
+    this.price = null;
+    this.available = null;
     // this.totalpriceALL = totalpriceALL;
 
     }
-    setAvailable(catalog, idList, numb) { // изменение признака доступности для продажи
-       /*
-         Params: 'catalog',
-                  'copyCatalog' -   this is JSON's object .
+    setAvailable(data) { // изменение признака доступности для продажи
 
-                'idList'      -     this is list with a position numbers/id.
-                'numb'   -     these are properties, availability level '0' , '1'.
-       */
+       let position = (f['products'].filter(item => Number(item['id']) === Number(data)))[0];
+       position["available"] = true;
 
-        let available = this.available;
-        this.#catalogName = null;
-
-        for (const [key, value] of Object.entries(catalog)){
-            this.#catalogName = String(key);
-        }
-        let copyCatalog ={catalogName : []}
-
-        for (let elem in catalog[catalogName]){
-            for (let numb in idList) {
-
-                if (elem['id'] === Number(numb) &&
-                    !(elem['available'] === numb)) {
-
-                    elem['available'] = numb;
-                    copyCatalog['catalogName'].push(elem);
-                } else {
-                    copyCatalog['catalogName'].push(elem);
-                }
-            }
-        }
-
-        return copyCatalog
+        let i = 0;
+        f['products'].forEach(item => {
+            if (Number(item['id']) === Number(data)) f['products'].splice(i, 1, position);
+            i++
+        })
+        return f
     }
 }
 
-class GoodsList extends Good {
+class GoodsList{
     // - класс для хранения каталога товаров со свойствами:
     // Для фильтрации и сортировки используйте функции массивов filter и sort с передачей в них соответствующих стрелочных функций
     #goods = null;              // массив экземпляров объектов класса Good (приватное поле)
@@ -81,9 +59,14 @@ class GoodsList extends Good {
 
     // https://bobbyhadz.com/blog/javascript-private-field-must-be-declared-in-enclosing-class
     constructor(sortP = false, sortD=false) {
-
-        super( 0, null, null,[],
-            1, false)
+        /*
+        TODO: "this.sort" - HEre is sorting of the products list .
+        Params: 'catalog'   - The final product which exit from here.
+                'sortPrice' - This parameter is for run up and run out the sorting.
+                'sortDir'   - This's a sorts from zero to max and reverse.
+            'catalogName'   - The catalog's title => "{catalogName : []}"
+                    'l'     - The position after sorting  go into common list.
+         */
 
         this.#goods = (catalog) => {
             let l = [];
@@ -101,47 +84,17 @@ class GoodsList extends Good {
         };
 
         this.sortD = sortD;
-
         this.sort = {
-            /*
-            TODO: HEre is sorting of the products list .
-            Params: 'catalog'   - The final product which exit from here.
-                    'sortPrice' - This parameter is for run up and run out the sorting.
-                    'sortDir'   - This's a sorts from zero to max and reverse.
-                'catalogName'   - The catalog's title => "{catalogName : []}"
-                        'l'     - The position after sorting  go into common list.
-             */
-
             catalog: null,
-            sortPrice: sortP,   //  включения сортировки по полю Price
-            sortDir: this.sortD,     //    направления сортировки по полю Price (true - по возрастанию, false - по убыванию)
+            sortPrice: sortP,
+            sortDir: this.sortD,
             filters : new RegExp(/(^([А-Я]{1}[А-Яа-яa-z0-9]+) ?([А-Яа-яa-z0-9])*\S?\s?([а-яa-z0-9]+)* ?([-_ ])? ?[а-яa-z0-9]*[а-яa-z0-9$]?)/),
             catalogName: null,
             l: [],
-            elemCatalog: (thisList)=>{
-                this.catalog = {'sorted' : []}
-                for(let elem of thisList){
-                    this.catalog['sorted'].push(elem[1])
-                }
-                return this.catalog
-            },
 
             set sortList(value){
-                /*
-                    Params: 'value: Array'
-                 */
-                // = copyCatalog //  возвращает массив доступных для
-                // продажи товаров в соответствии с
-                // установленным
-
-                    // Для проверки соответствия поля name регулярному выражению в фильтре, используйте такую конструкцию
-                    // filter.test(good.title). При этом в поле filter должно быть записано регулярное выражение, описываемое в JS как:
-                    // /<regexp>/<flags>
-
-
-
                 for (let [key, val] of Object.entries(value)) {
-                    this.catalogtitle = key;
+                    this.catalogName = key;
                 }
 
                 for (let elem of (value[String(this.catalogName)]).filter(item => item.price > 0)){
@@ -171,7 +124,8 @@ class GoodsList extends Good {
                     }
                 }
 
-                this.catalog = this.elemCatalog(this.l)
+                // this.catalog = this.elemCatalog(this.l)
+                this.catalog = {'sorted' : this.l}
 
             },
 
@@ -199,13 +153,7 @@ class GoodsList extends Good {
         };
 
          */
-
-
-
-        for (let [key, value] of Object.entries(catalog)){
-            this.#catalogName = key;
-
-        }
+        for (let [key, value] of Object.entries(catalog)) this.#catalogName = key;
 
         let len = catalog[String(this.#catalogName)].length;
         let i = 0;
@@ -349,7 +297,6 @@ class Basket extends Good {
             quantity: ' Общее кол-во',
 
             set totalAmount(value) {
-
                 for (let [key, val] of Object.entries(value)) this.catalogName = key;
                 this.result = value[this.catalogName].reduce((sum, curr) => {
                     return Number(sum) + Number(curr['amount'])
@@ -503,7 +450,11 @@ class Basket extends Good {
 
 
 
+
 console.clear()
+let g = new Good()
+g.setAvailable(6)
+
 let totalBasket = new Basket();
 
 console.log()
