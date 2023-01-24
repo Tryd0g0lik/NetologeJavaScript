@@ -47,7 +47,7 @@ class Good {
                 'numb'   -     these are properties, availability level '0' , '1'.
        */
 
-        let available = this.available     ;
+        let available = this.available;
         this.#catalogName = null;
 
         for (const [key, value] of Object.entries(catalog)){
