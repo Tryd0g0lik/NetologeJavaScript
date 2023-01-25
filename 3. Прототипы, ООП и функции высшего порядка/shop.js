@@ -26,459 +26,116 @@ let b = {"totalBasket":[ // the list product from the basket
     {"id":10,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 3},
     ]}
 class Good {
-    #catalogName = null;
-    constructor() {
-    this.id = null;
-    this.title = null;
-    this.description = null;
-    this.size = null;
-    this.price = null;
-    this.available = null;
-    // this.totalpriceALL = totalpriceALL;
-
+    constructor(id, title, descriptions, sizes, price, available) {
+    this.id = id;
+    this.title = title;
+    this.description = descriptions;
+    this.size = sizes;
+    this.price = price;
+    this.available = available;
     }
-    setAvailable(data) { // изменение признака доступности для продажи
+    set Available(value) { // изменение признака доступности для продажи
+        this.available = value;
+        return this
+    }
 
-       let position = (f['products'].filter(item => Number(item['id']) === Number(data)))[0];
-       position["available"] = true;
-
-        let i = 0;
-        f['products'].forEach(item => {
-            if (Number(item['id']) === Number(data)) f['products'].splice(i, 1, position);
-            i++
-        })
-        return f
+    get Available(){
+        return this
     }
 }
 
+
 class GoodsList{
-    // - класс для хранения каталога товаров со свойствами:
-    // Для фильтрации и сортировки используйте функции массивов filter и sort с передачей в них соответствующих стрелочных функций
-    #goods = null;              // массив экземпляров объектов класса Good (приватное поле)
-    #catalogName = null;        // Согласно статье:
+    #goods=[];
+    constructor(dataList=[], sortPrice=false, sortDir=false) {
 
-    // https://bobbyhadz.com/blog/javascript-private-field-must-be-declared-in-enclosing-class
-    constructor(sortP = false, sortD=false) {
-        /*
-        TODO: "this.sort" - HEre is sorting of the products list .
-        Params: 'catalog'   - The final product which exit from here.
-                'sortPrice' - This parameter is for run up and run out the sorting.
-                'sortDir'   - This's a sorts from zero to max and reverse.
-            'catalogName'   - The catalog's title => "{catalogName : []}"
-                    'l'     - The position after sorting  go into common list.
-         */
+        this.sortPrice = sortPrice;
+        this.sortDir = sortDir;
+        this.#goods = dataList;
+    }
 
-        this.#goods = (catalog) => {
-            let l = [];
-            for (let [key, value] of Object.entries(catalog)) {
-                this.#catalogName = key;
-            }
+    get goods(){
+        let filter = new RegExp(/(^([[А-Яа-яa-z0-9]+) ?([А-Яа-яa-z0-9])*\S?\s?([а-яa-z0-9]+)* ?([-_ ])? ?[а-яa-z0-9]*[а-яa-z0-9$]?)/);
 
-            for (let ele in catalog[String(this.#catalogName)]) {
-                if (ele['available'] === true) {
-                    l.push(ele['available'])
+        let goodsTrue = (((lists)=>{
+            let elemList = [];
+            for (let elem of lists) {
+                if (elem.available === true) {
+
+                elemList.push(elem);
                 }
             }
+            return elemList
+        })(this.#goods));
 
-            return l
-        };
+        if (this.sortPrice === true ) {
 
-        this.sortD = sortD;
-        this.sort = {
-            catalog: null,
-            sortPrice: sortP,
-            sortDir: this.sortD,
-            filters : new RegExp(/(^([А-Я]{1}[А-Яа-яa-z0-9]+) ?([А-Яа-яa-z0-9])*\S?\s?([а-яa-z0-9]+)* ?([-_ ])? ?[а-яa-z0-9]*[а-яa-z0-9$]?)/),
-            catalogName: null,
-            l: [],
-
-            set sortList(value){
-                for (let [key, val] of Object.entries(value)) {
-                    this.catalogName = key;
-                }
-
-                for (let elem of (value[String(this.catalogName)]).filter(item => item.price > 0)){
-                    this.l.push([Number(elem.price), elem])
-                }
-
-                for (let elem of this.l) {
-                    if (elem[1]['available'] === true &&
-                        this.sortDir === false &&
-                        (this.filters.test(elem[1]['title'])) === true) {
-
-                        (this.l).sort((a, b) => {
-                            if (a[0] > b[0]) return 1;
-                            if (a[0] === b[0]) return 0;
-                            if (a[0] < b[0]) return -1
-                        });
-
-                    } else if (elem[1]['available'] === true &&
-                        this.sortDir === true &&
-                        (this.filters.test(elem[1]['title'])) === true){
-
-                        (this.l).sort((a, b) => {
-                            if (a[0] < b[0]) return 1;
-                            if (a[0] === b[0] ) return  0;
-                            if (a[0] > b[0]) return -1
-                        })
+            if (this.sortDir === false){
+                goodsTrue.sort((a, b) => {
+                    if ((filter).test(a.title) === true && (filter).test(b.title) === true) {
+                        if (Number(a.price) < Number(b.price)) return 1;
+                        if (Number(a.price) === Number(b.price)) return 0;
+                        if (Number(a.price) > Number(b.price)) return -1;
                     }
-                }
-
-                // this.catalog = this.elemCatalog(this.l)
-                this.catalog = {'sorted' : this.l}
-
-            },
-
-            get sortList(){
-                return this.catalog
+            });} else if(this.sortDir === true){
+                    goodsTrue.sort((a, b) => {
+                        if ((filter).test(a.title) === true &&
+                            (filter).test(b.title) === true) {
+                            if (Number(a.price) > Number(b.price)) return 1;
+                            if (Number(a.price) === Number(b.price)) return 0;
+                            if (Number(a.price) < Number(b.price)) return -1;
+                        }
+                });
             }
         }
+        return goodsTrue
+
     }
 
-    sorts(catalogs){
-        /*
-        TODO: It 's for a product sorting. Read the description from a 'this.sort' property
-         */
-       this.sort.sortList = catalogs;
-       return this.sort.sortList
+    add(val){
+        (this.#goods).push(val);
+        return this
     }
 
-
-    add(newData = null, catalog) {
-        /*
-        TODO: The position will be added into catalog.
-        Params: -   'newData' - this's object, new position for a catalog.
-                    'newData'   - {id, title, descriptions, sizes, prices, avaibles,
-                    'catalog'   -   this is JSON's object .
-        };
-
-         */
-        for (let [key, value] of Object.entries(catalog)) this.#catalogName = key;
-
-        let len = catalog[String(this.#catalogName)].length;
-        let i = 0;
-        for (let elem in catalog[String(this.#catalogName)]) {
-            if (catalog[String(this.#catalogName)][i]['id'] === len)
-                return "Rewrite the 'id'";
+    remove(id){ // как в списке объектов определить индекс объекта при условии, что свойство свопало не используя цикл?
+        let i=0;
+        for (let elem of this.#goods) {
+            if (Number(elem.id) === Number(id)) (this.#goods).splice(i, 1);
             i++;
         }
 
-        newData = {
-            id: len,
-            title: this.title,
-            description: this.description,
-            sizes: this.size,
-            prices: this.price,
-            avaibles: this.available     ,
-        };
-
-        (catalog[String(this.#catalogName)]).push(newData);
-        return catalog
-    }
-
-    remove(id, catalog) { //  удаление товара из каталога по его id
-        /*
-        TODO: to remove one iem at a time.
-        Params: 'catalog'   -   this is JSON's object .
-
-         */
-        for (let [key, volue] of Object.entries(catalog)){
-            this.#catalogName = key;
-        }
-
-        let i = 0;
-        for (let elem in catalog[String(this.#catalogName)]){
-            if (Number(elem['id']) === Number(id)){
-                catalog[String(this.#catalogName)].splice(i, 1);
-            }
-            i++
-        }
-
-        return catalog;
+        return this.#goods
     }
 }
 
-class BasketGood extends Good{ //   для хранения данных о товаре в корзине с дополнительным свойством:
-    //  (товар помещаемый в корзину),
 
+let winter  = new Good(1, 'jacket', "LA-LA-LA-LA", 50, 1355, true)
+let winter2  = new Good(2, 'jacket red', "LA-LA-LA-LA", 50, 1055, false)
+let winter3  = new Good(3, 'jacket blue', "LA-LA-LA-LA", 45, 3055, true)
+winter.Available = true
+console.log(winter, winter2, winter3)
 
-    constructor(id, amount){
-         /*
-        TODO: For a one product/position here will be adding the count/quantity and that's all/end.
-          this.positionCheck'   -made a dynamic function under any directory. After taking the id position and.
-          checking the index, we send the position to the basket.
-         'set/get fullBasket'   -Checking the position on presence in the catalog.
-         'catalogPositName'     - The dynamic catalog.
-         'basket'               - The basket fulling. One position after the check and plus quantity.
+console.log("-----------------")
+console.log("----GoodsList----")
+// let winterList = new GoodsList(true, true);
+// let winterList2 = new GoodsList(true);
+let winterList3 = new GoodsList([winter, winter2, winter3,], true, false);
 
-     Params: 'catalog'   - it's total product catalog from the all db-shop or of the Basket
-             'amount'    - the product quantity.
-            'fullBasket'    - the product's list of the basket.
-     */
-        super(id)
+winterList3.add(new Good(4, "tunic", "TU-TU-|TU", 34, 4030, false));
+winterList3.add(new Good(5, "tunic", "TU-TU-|TU", 34, 30, true));
+console.log(winterList3.goods)
 
-        this.goods = {"Basket " : []}; //   массив объектов класса BasketGood для хранения данных о товарах в корзине
-        this.positionCheck = { //
+console.log("----GoodsList.remove")
+console.log(winterList3.remove(3))
 
-            id: this.id,
-            inBasket: null,
 
-            catalogPositName: (catalog)=> {
+// console.log(winterList.goods)
+// console.log(winterList2.goods)
 
-                for (let [key, val] of Object.entries(catalog)) return key
-            },
-            set fullBasket(catalog){
 
+// console.log(winterList.Lists)
 
-                for (let elem of catalog[this.catalogPositName(catalog)]){
-                    if (elem['id'] === this.id) this.inBasket = elem; }
-            },
 
-            get fullBasket(){
-                return this.inBasket
-            }
 
-        }
 
-        this.product = [null , null];
-        this.basket = {
-
-            amount: amount, //    количество товара в корзин
-            fullBasket: {'BasketGood': []},
-
-            set fulling(value){
-                if (value[0]['available'] === true) {
-
-                    value[0]['amount'] = value[1];
-                    this.fullBasket['BasketGood'].push(value[0])
-                    return this.fullBasket
-                }
-            },
-
-            get fulling(){
-                return this.fullBasket
-            }
-
-        };
-    }
-
-    addQuantity(catalogName){
-        /*
-            Params: 'catalogName'   -the catalog name;
-         */
-        this.positionCheck.fullBasket = catalogName
-        this.product = [this.positionCheck.fullBasket, this.basket.amount]
-
-        this.basket.fulling = this.product
-        return this.basket.fulling
-    }
-}
-
-class Basket extends Good {
-    constructor(id=null) {
-        /*
-        Params:     'add()':
-                    'id'    - it is 'id' of the first position found.
-                    'good'  - It's one position or one product of the total catalog.
-                    'b'     - This all catalog from the basket which has an "'available'=true" and "'amount'>0"
-                    'f'     - It's total catalog from the db-shop.
-                    'onePositionOfBasket'  -this is one position for what to add to the Basket.
-
-                     'clear()'  - cleaning in Basket.
-                     'removeUnavailable()'  - In total list positions founds all position which has 'available ===
-                      false' end removed
-         */
-        super(id, )
-        //  При реализации геттеров используйте методы массивов, такие как reduce() и forEach().
-
-        this.totalQuantity = {
-            result: null,
-            catalogName: null,
-            quantity: ' Общее кол-во',
-
-            set totalAmount(value) {
-                for (let [key, val] of Object.entries(value)) this.catalogName = key;
-                this.result = value[this.catalogName].reduce((sum, curr) => {
-                    return Number(sum) + Number(curr['amount'])
-                }, 0);
-
-                return this.result
-            },
-
-            get totalAmount() { //   возвращает общую стоимость товаров в корзине
-                return [this.result, this.quantity]
-            },
-        }
-
-        this.totalSum = {
-            result: null,
-            catalogName: null,
-            quantity: ' Руб.',
-
-            set totalSum(value){
-                for (let [key, val] of Object.entries(value)) this.catalogName = key;
-                this.result = value[this.catalogName].reduce((sum, curr) => {
-                    return Number(sum) + (Number(curr['price']) * Number(curr['amount']));
-                }, 0);
-
-                return this.result
-            },
-
-            get totalSum() { //  возвращает общее количество товаров в корзине
-                return [this.result, this.quantity]
-
-            },
-        }
-    }
-    add(id, amount){ //       Добавляет товар в корзину, если товар уже есть увеличивает количество
-
-        this.amount = amount;
-        this.id = id;
-        let onePositionOfBasket = null;
-        let basket = new BasketGood(this.id, this.amount);
-
-        onePositionOfBasket = b['totalBasket'].find((item, i, array) => Number(item['id']) === Number(this.id)); // db from
-                                                                                            // the bascket/ for so that the find the one position
-
-        if (onePositionOfBasket !== null &&
-            onePositionOfBasket !== undefined) onePositionOfBasket['amount'] = Number(onePositionOfBasket['amount']) + Number(this.amount);
-
-        if (onePositionOfBasket !== null &&
-            onePositionOfBasket !== undefined) {
-            let i = 0;
-            for (let elem in b['totalBasket']) { // for a remove one position and add the too same position with
-                                                // inave the quantity 'amount'.
-                if (Number(elem['id']) === Number(onePositionOfBasket['id'])) b['totalBasket'].splice(i, 1).push(onePositionOfBasket);
-                i++;
-            }
-        }
-
-        if (onePositionOfBasket === null || // Adding new position eith amount in total the llist Basket's product.
-            onePositionOfBasket === undefined) {
-
-            basket.positionCheck.fullBasket = f; // checking the position on presence in the catalog
-            let good = basket.positionCheck.fullBasket;
-            let position = new BasketGood(good['id'], this.amount);
-
-            position.basket.fulling = [good, this.amount]
-            b['totalBasket'].push((position.basket.fulling['BasketGood'][0]));
-        }
-
-        return b
-    }
-
-    remove(id, amount){ //    Уменьшает количество товара в корзине, если количество становится равным нулю, товар удаляется
-        this.id = id;
-        this.amount = amount;
-
-        let position = new BasketGood(this.id, this.amount);
-
-        position.positionCheck.fullBasket = b;                       // the db getting from a Basket-shop.
-        let onePosition = position.positionCheck.fullBasket;
-        let catalogName = position.positionCheck.catalogPositName(b); // this's key's name which that getting  of
-                                                                      // the json's file.
-
-        if (onePosition !== undefined &&
-            onePosition !== null ){
-
-            let result = (Number(onePosition['amount']) - Number(this.amount));
-            let id = 0;
-
-            if (result <= 0){
-                for (let elem of  b[catalogName]){
-
-                    if (Number(elem['id']) === Number(this.id)) {
-                        b[catalogName].splice(id, 1); return b
-                    }
-                    id++
-                }
-
-            } else if ((Number(onePosition['amount']) - Number(this.amount)) > 0) {
-                onePosition['amount'] = (Number(onePosition['amount']) - Number(this.amount));
-
-                // let i = 0;
-                for (let elem of b[catalogName]){
-
-                    if (Number(elem['id']) === this.id) {
-                        b[catalogName].splice(id, 1, onePosition);
-                        return b
-                    }
-                    id++
-                }
-            }
-
-        } else {
-            console.log("ERROR: Sorry, We can't find that product's 'id' ")
-        }
-
-    }
-    clear(){ //                  Очищает содержимое корзины
-
-        b["totalBasket"] = [];
-        return b;
-
-    }
-    removeUnavailable(){ //       Удаляет из корзины товары, имеющие признак available === false (использовать filter())
-        /*
-            removeUnavailable In total list positions founds all position which has 'available === false' end removed
-         */
-        let positions = b['totalBasket'].filter((item, i, array) => item['available'] === false );
-
-        for (let pos of positions) {
-            let i = 0;
-            for (let elem of b['totalBasket']){
-
-                if (Number(elem['id']) === pos['id']) {
-                    b['totalBasket'].splice(i, 1);
-                    continue;
-                }
-
-                i++
-            }
-        }
-        return b
-    }
-}
-/*
-    Вызовите несколько раз реализованные методы этих объектов с необходимыми аргументами, устанавливая условия
-    фильтрации и сортировки для GoodsList. Выведите в консоль отфильтрованный и сортированный каталог товаров, а
-    также значения общих суммы и количества товаров в корзине.
- */
-
-
-// let resp = new GoodsList(true, true);
-
-
-
-
-console.clear()
-let g = new Good()
-g.setAvailable(6)
-
-let totalBasket = new Basket();
-
-console.log()
-totalBasket.totalQuantity.totalAmount = b;
-totalBasket.totalSum.totalSum = b;
-
-console.log()
-console.log(JSON.stringify(totalBasket.totalQuantity.totalAmount));
-console.log(JSON.stringify(totalBasket.totalSum.totalSum));
-
-// console.log(JSON.stringify(totalBasket.add()))
-
-console.log()
-console.log('add::')
-console.log(JSON.stringify(totalBasket.add(9, 105)))
-
-console.log()
-console.log('remove::')
-console.log(JSON.stringify(totalBasket.remove(1 , 2)))
-
-console.log()
-console.log('clear::')
-console.log(JSON.stringify(totalBasket.clear()))
-
-console.log()
-console.log('removeUnavailable::')
-console.log(JSON.stringify(totalBasket.removeUnavailable()))
+// console.log(winter, winter2, winter3)
