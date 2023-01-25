@@ -48,7 +48,6 @@ class Good {
 class GoodsList{
     #goods=[];
     constructor(dataList=[], sortPrice=false, sortDir=false) {
-
         this.sortPrice = sortPrice;
         this.sortDir = sortDir;
         this.#goods = dataList;
@@ -79,8 +78,7 @@ class GoodsList{
                     }
             });} else if(this.sortDir === true){
                     goodsTrue.sort((a, b) => {
-                        if ((filter).test(a.title) === true &&
-                            (filter).test(b.title) === true) {
+                        if ((filter).test(a.title) === true && (filter).test(b.title) === true) {
                             if (Number(a.price) > Number(b.price)) return 1;
                             if (Number(a.price) === Number(b.price)) return 0;
                             if (Number(a.price) < Number(b.price)) return -1;
@@ -108,6 +106,20 @@ class GoodsList{
     }
 }
 
+class BasketGood extends Good{
+    #basket=[];
+    constructor(id, title, descriptions, sizes, price, available, amount) {
+        super(id, title, descriptions, sizes, price, available);
+        this.amount = amount;
+    }
+    set amount(val){
+        this.amount['amount'] = val;
+        return this
+    }
+    get amount(){
+        return this
+    }
+}
 
 let winter  = new Good(1, 'jacket', "LA-LA-LA-LA", 50, 1355, true)
 let winter2  = new Good(2, 'jacket red', "LA-LA-LA-LA", 50, 1055, false)
@@ -124,18 +136,12 @@ let winterList3 = new GoodsList([winter, winter2, winter3,], true, false);
 winterList3.add(new Good(4, "tunic", "TU-TU-|TU", 34, 4030, false));
 winterList3.add(new Good(5, "tunic", "TU-TU-|TU", 34, 30, true));
 console.log(winterList3.goods)
-
+console.log()
 console.log("----GoodsList.remove")
 console.log(winterList3.remove(3))
-
-
-// console.log(winterList.goods)
-// console.log(winterList2.goods)
-
-
-// console.log(winterList.Lists)
-
-
-
-
-// console.log(winter, winter2, winter3)
+console.log()
+console.log("----BasketGood---")
+let amount = new BasketGood(winter);
+amount.amount = 5;
+console.log(amount.amount)
+console.log()
