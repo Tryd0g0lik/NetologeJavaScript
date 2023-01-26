@@ -1,30 +1,3 @@
-/*
-Задача 2
- */
-let f = {"products":[ // total db
-    {"id":0,"title":"Торт","descriptions":"ля-ля-ля Тортище","sizes":100,"price":12,"available":true},
-    {"id":1,"title":"Пирожок Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
-    {"id":2,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":false},
-    {"id":3,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":false},
-    {"id":4,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
-    {"id":5,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":false},
-    {"id":6,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":false},
-    {"id":7,"title":"Сироп","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
-    {"id":8,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
-    {"id":9,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
-    {"id":10,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
-    {"id":11,"title":"Клюква","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true},
-    ]}
-
-let b = {"totalBasket":[ // the list product from the basket
-    {"id":0,"title":"Торт","descriptions":"ля-ля-ля Тортище","sizes":100,"price":12,"available":true, 'amount': 15},
-    {"id":1,"title":"Пирожок Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 19},
-    {"id":4,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 21},
-    {"id":7,"title":"Сироп","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 1},
-    {"id":8,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 5},
-    {"id":9,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 150},
-    {"id":10,"title":"Пирожок","descriptions":"LA-LA-LA-LA","sizes":1050,"price":1355,"available":true, 'amount': 3},
-    ]}
 class Good {
     constructor(id, title, descriptions, sizes, price, available) {
     this.id = id;
@@ -95,7 +68,7 @@ class GoodsList{
         return this
     }
 
-    remove(id){ // как в списке объектов определить индекс объекта при условии, что свойство свопало не используя цикл?
+    remove(id){
         let i=0;
         for (let elem of this.#goods) {
             if (Number(elem.id) === Number(id)) (this.#goods).splice(i, 1);
@@ -106,19 +79,105 @@ class GoodsList{
     }
 }
 
-class BasketGood extends Good{
-    #basket=[];
-    constructor(id, title, descriptions, sizes, price, available, amount) {
-        super(id, title, descriptions, sizes, price, available);
-        this.amount = amount;
+class BasketGood{
+    // #basket=[];
+    constructor() {
+        this.amount = 0;
+        this.basket=[]
+
     }
-    set amount(val){
-        this.amount['amount'] = val;
+
+    set cart(val){
+        this.basket.push({'position id': val[0].id,
+                            'title':val[0].title,
+                            'price':val[0].price,
+                            'quantity': this.amount = val[1],
+                            'available': val[0].available,})
+        return  this.basket
+    }
+    get cart(){
+
+        return  this.basket
+    }
+}
+
+class Basket extends BasketGood{
+    #result = [];
+    constructor(goods) {
+        super()
+        this.goods = goods;
+    }
+
+    get totalAmounts(){
+
+        this.totalAmount =  (this.goods.basket).reduce((sum, item) => {
+              return Number(sum) + Number(item.quantity);
+            }, 0);
+
         return this
     }
-    get amount(){
+
+    get totalSums(){
+        this.totalSum = (this.goods.basket).reduce((sum, item) => {
+            return Number(sum) + (Number(item.quantity) * Number(item.price));
+            }, 0);
+
         return this
     }
+    add(good, amount){
+        this.#result = (this.goods.basket).filter(item => Number(item['position id']) === Number(good.id));
+
+        if (this.#result.length > 0) {
+            this.#result[0]['quantity'] = Number(this.#result[0]['quantity']) + Number(amount);
+
+            let i=0;
+            for (let elem of this.goods.basket) {
+                if (Number(elem['position id']) === Number(good.id)) elem['quantity'] = this.#result[0]['quantity']
+                i++;
+            } this.#result = []; return this.goods.basket;
+        }
+
+        super.cart = [good, amount];
+        this.goods.basket.push(super.cart[0])
+        this.#result = [];
+        return this.goods.basket
+    }
+
+    remove(good, amount){
+        this.#result = (this.goods.basket).filter(item => Number(item['position id']) === Number(good.id));
+        this.#result[0]['quantity'] = Number(this.#result[0]['quantity']) - Number(amount);
+
+        let i=0;
+        for (let elem of this.goods.basket) {
+            if (Number(elem['position id']) === Number(good.id)) elem['quantity'] = this.#result[0]['quantity']
+
+            i++;
+        }
+
+        if (Number(this.goods.basket[i-1]['quantity']) <= 0) {
+            this.goods.basket.splice(i-1, 1);
+        }
+
+        this.#result = []; return this.goods.basket;
+    }
+
+    clear(){
+        return this.goods.basket = []
+    }
+
+    removeUnavailable(){
+        this.#result = this.goods.basket.filter(item => item['available'] === false);
+
+        let i = 0;
+        for(let elem of this.goods.basket) {
+            let res = (this.#result).filter(item => Number(elem['position id']) === item['position id']);
+            if (Number(res.length) > 0) (this.goods.basket).splice(i, 1);
+            i++;
+        }
+
+        return this.goods.basket
+    }
+
 }
 
 let winter  = new Good(1, 'jacket', "LA-LA-LA-LA", 50, 1355, true)
@@ -129,19 +188,61 @@ console.log(winter, winter2, winter3)
 
 console.log("-----------------")
 console.log("----GoodsList----")
-// let winterList = new GoodsList(true, true);
-// let winterList2 = new GoodsList(true);
-let winterList3 = new GoodsList([winter, winter2, winter3,], true, false);
+let goodsList = new GoodsList([winter, winter2, winter3,], true, false);
 
-winterList3.add(new Good(4, "tunic", "TU-TU-|TU", 34, 4030, false));
-winterList3.add(new Good(5, "tunic", "TU-TU-|TU", 34, 30, true));
-console.log(winterList3.goods)
+goodsList.add(new Good(4, "tunic", "TU-TU-|TU", 34, 4030, false));
+let winter5 = new Good(5, "tunic", "TU-TU-|TU", 34, 30, true);
+goodsList.add(winter5);
+console.log(goodsList.goods)
+
 console.log()
 console.log("----GoodsList.remove")
-console.log(winterList3.remove(3))
+console.log(goodsList.remove(3))
+
 console.log()
+console.log("-----------------")
 console.log("----BasketGood---")
-let amount = new BasketGood(winter);
-amount.amount = 5;
-console.log(amount.amount)
+
+let basketGood = new BasketGood();
+basketGood.cart = [winter3, 13];
+basketGood.cart = [winter5, 8];
+basketGood.cart = [winter, 18];
+console.log(basketGood.cart)
+
 console.log()
+console.log("-----------------")
+console.log("------Basket-----")
+let total = new Basket(basketGood);
+total.totalAmounts
+console.log(total.totalSums.goods.basket)
+console.log(total.totalAmounts.totalAmount)
+console.log(total.totalSums.totalSum)
+
+console.log()
+console.log("------Basket.add-")
+let winter7  = new Good(7, 'jacket blue', "LA-LA-LA-LA", 45, 155, true)
+console.log(total.add(winter7, 15)) // winter, winter2, winter3
+console.log(total.totalAmounts.totalAmount)
+console.log(total.totalSums.totalSum)
+
+console.log()
+console.log("------Basket.remove")
+console.log(total.remove(winter7, 21))
+console.log(total.totalAmounts.totalAmount)
+console.log(total.totalSums.totalSum)
+
+console.log()
+console.log("------Basket.clear")
+console.log("После проверки - закомментировать {Basket.clear}")
+// console.log(total.clear())
+// console.log(total.totalAmounts.totalAmount)
+// console.log(total.totalSums.totalSum)
+
+console.log()
+console.log("------Basket.removeUnavailable")
+total.goods.basket[0].available = false;
+total.goods.basket[2].available = false;
+console.log(total.removeUnavailable())
+console.log(total.totalAmounts.totalAmount)
+console.log(total.totalSums.totalSum)
+
