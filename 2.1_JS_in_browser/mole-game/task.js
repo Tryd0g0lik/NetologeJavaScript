@@ -11,18 +11,29 @@ window.addEventListener('click', () => {
 			reputation++;
 			dead.innerText = String(reputation);
 
-		} else if (((result.anchorNode).className).includes('hole_has-mole') !== true) {
+		}
+
+		if (((result.anchorNode).className).includes('hole_has-mole') !== true) {
 			minusing++;
 			lost.innerText = String(minusing);
 
 		}
 
-		if (Number(minusing) === 5) document.location.assign('./img.png');
-		else if (Number(reputation) === 10) {
-			location.assign('./img_1.png')
+		if (reputation === 2 || minusing === 5) {
+			let answered = confirm("Обнулить?");
+
+			if (answered === true) {
+				reputation = 0; minusing = 0;
+				dead.innerText = String(reputation);
+				lost.innerText = String(minusing);
+
+			}
+
 		}
 	}
-})
+});
+
+
 
 
 
