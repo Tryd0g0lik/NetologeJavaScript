@@ -1,6 +1,5 @@
 class Game {
 	#stopwatch = {
-		// clock: document.getElementsByClassName('timer'),
 		minutes: document.getElementsByClassName('timer')[0].getElementsByClassName('timer__minutes'),
 		secs: document.getElementsByClassName('timer')[0].getElementsByClassName('timer__seconds'),
 	}
@@ -10,7 +9,7 @@ class Game {
 		this.statusWins = this.htmlBlock.getElementsByClassName('status__wins');
 		this.statusLoss = this.htmlBlock.getElementsByClassName('status__loss');
 		this.classWord = this.htmlBlock.getElementsByClassName('word');
-
+		this.timeWord();
 		this.startWords();
 	}
 
@@ -40,7 +39,6 @@ class Game {
 
 		document.querySelectorAll('.symbol').forEach((e) => e.remove())
 		try {
-			// let spans = document.createElement('span');
 
 			const newHtml = [...singlWord].map((el, i) => {
 				return `<span class="symbol ${i === 0 ? "symbol_current" : ""}">${el}</span>`
@@ -67,9 +65,7 @@ class Game {
 		/*
 		 TODO: this's listener on an event of the keywbord.
 		*/
-		// Screenshot36.png - если строка содержит одинаковые символы
-		// 	и поиграть клавишами, то нажимая на клавишу отрабатываются все символы 
-		//	пропорционально клавише. 
+
 		try {
 			const newWord = this.htmlBlock.getElementsByClassName('symbol')
 			let i = 0;
@@ -77,8 +73,6 @@ class Game {
 
 			window.addEventListener('keydown', (e) => {
 				let k = e.key;
-				// console.log("1: ", e.key)
-				// console.log("2: ", e.code)
 
 				if (i < newWord.length) {
 					Array(newWord).map((el) => {
@@ -86,7 +80,7 @@ class Game {
 						if ((k) === el[i].innerText && !newWord[i].classList.contains('symbol_correct')) {
 
 							newWord[i].classList.add('symbol_correct');
-							this.success()
+							this.success();
 
 							if (i === newWord.length - 1) this.startWords();
 							i++
@@ -115,7 +109,9 @@ class Game {
 		Пытался использовать аналогично, но не заработало. Пришлось тип "Number" данных пропысывать */
 		if (Number(this.statusWins[0].innerText) == 10) {
 			alert('Ты победитель!');
+			this.stopInterval();
 			this.reset();
+			document.getElementsByClassName('timer')[0].innerHTML = '<h3>Вы победитель!</h3>'
 		}
 
 	}
@@ -124,7 +120,11 @@ class Game {
 		this.statusLoss[0].innerText = Number(this.statusLoss[0].textContent) + 1
 		if (Number(this.statusLoss[0].innerText) === 5) {
 			alert('Вы проиграли!');
+			this.stopInterval();
 			this.reset();
+			document.getElementsByClassName('timer')[0].innerHTML = '<h3>Вы проиграли!</h3>'
+
+
 		}
 	}
 
@@ -136,23 +136,30 @@ class Game {
 	}
 
 	timeWord() {
-		/* Что лучше, секундомер прописать через модуль "Date" или самописный как данный?
-		Для меня сейчас оба одинаковы, поэтому и спросил :)  */
+		let ss = +this.#stopwatch.secs[0].textContent;
+		let mm = +this.#stopwatch.minutes[0].textContent;
 
-		let date = new Date(2011, 0, 1, 0, 1, 25);
-		// console.log(date.getMinutes() + ":" + date.getSeconds())
+		let timer = setInterval(() => {
 
-		let m = this.#stopwatch.minutes[0];
-		let s = this.#stopwatch.secs[0];
-		console.log(m.textContent)
-		console.log(s.textContent)
+			this.#stopwatch.secs[0].textContent = String(ss);
+			this.#stopwatch.minutes[0].textContent = String(mm);
 
-		// setInterval(() => {
-		
-		// }, 1000)
+			ss--;
+			if (ss === -1 && mm === 0) clearInterval(timer);
 
+			if (ss < 0) ss = 59;
 
-		console.dir(m)
+			if (ss === 59) mm = mm - 1;
+
+		}, 1000);
+
+	}
+
+	stopInterval() {
+
+		this.publicateWords('<span></span>');
+		Object(this.classWord)[0].innerHTML = '';
+		return
 	}
 
 	startWords() {
@@ -165,7 +172,7 @@ class Game {
 		this.publicateWords(htmlWord)
 		this.eventKaywbort()
 
-		this.timeWord()
+
 		return
 	}
 
@@ -173,23 +180,3 @@ class Game {
 }
 
 new Game(document.getElementById('game'))
-
-
-// for (let ind = +m.textContent; ind < 60 && ind >= 0; ind--) {
-// 	m.textContent = String(ind);
-// 	console.log("ind: ", ind)
-// 	let sec = (ind === +m.textContent) ? +s.textContent : 59;
-// 	for (let i = sec * 1000; i < 60000 && i >= 0; i--) {
-		
-// 		if (i % 1000 === 0) s.textContent = String(i / 1000);
-// 		if (ind === 0 && i === 0) break;
-// 		if (i === 0) {
-// 			/* Как в одной строке прописать 2 вырожения ? */
-// 			break
-		
-// 		}
-		
-// 		console.log("i: ", i)
-// 	}
-	
-// }
