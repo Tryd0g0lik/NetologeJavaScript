@@ -16,3 +16,8 @@ node_modules/
 3. Прототипы, ООП и функции высшего порядка/
 1.4. Обработка ошибок, замыкания и асинхронность/
 **/package-lock.json
+
+
+**/docker-compose.yml
+**/Dockerfile
+**/prepros.config
