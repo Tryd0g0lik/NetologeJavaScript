@@ -1,4 +1,13 @@
+/*
+ На Ваш взгляд, в данном объекте где лучше выделить свойства объекта:
+    размер шривта,
+    цвет шрифта,
+    цвет фона?
+
+    В данный момент, размер шрфта
+*/
 class ContantSize {
+    // // backg: HTMLCollection;
     constructor(htmlBlock) {
         this.htmlBlock = htmlBlock;
         this.startUp();
@@ -19,11 +28,11 @@ class ContantSize {
         /*
         TODO: The 'font-size_active' class finding and remove active classe.
         */
-        this.fontSizes = this.controlFontSize();
+        let fontSizes = this.controlFontSize();
         let i = 0;
-        for (i; i < this.fontSizes.length; i++) {
-            if (this.fontSizes[i].classList.contains('font-size_active')) {
-                this.fontSizes[i].classList.remove('font-size_active');
+        for (i; i < fontSizes.length; i++) {
+            if (fontSizes[i].classList.contains('font-size_active')) {
+                fontSizes[i].classList.remove('font-size_active');
                 return i;
             }
         }
@@ -33,11 +42,11 @@ class ContantSize {
         /*
         TODO: the element finding wich has an event. It's for assingment the 'active' class
         */
-        this.fontSizes = this.controlFontSize();
+        let fontSizes = this.controlFontSize();
         let i = 0;
-        for (i; i < this.fontSizes.length; i++) {
-            let elem = this.fontSizes[i];
-            this.fontSizes[i].addEventListener('click', () => {
+        for (i; i < fontSizes.length; i++) {
+            let elem = fontSizes[i];
+            fontSizes[i].addEventListener('click', () => {
                 this.removeActiveSizeBook();
                 if (elem.classList.contains('font-size_active') === false) {
                     elem.classList.add('font-size_active');
@@ -52,22 +61,21 @@ class ContantSize {
         TODO: the new element wich has get the new  class 'active'
         
         */
-        let size;
         let activBlock = (this.htmlBlock.getElementsByClassName('font-size_active'));
         if (activBlock[0].getAttribute('data-size') &&
             activBlock[0].getAttribute('data-size') === 'small')
-            size = 'book_fs-small';
+            this.size = 'book_fs-small';
         else if (activBlock[0].getAttribute('data-size') === null)
-            size = null;
+            this.size = null;
         else {
-            size = 'book_fs-big';
+            this.size = 'book_fs-big';
         }
         ;
         for (let elem of ['book_fs-small', 'book_fs-big']) {
-            if (elem !== size && this.htmlBlock.classList.contains(elem))
+            if (elem !== this.size && this.htmlBlock.classList.contains(elem))
                 this.htmlBlock.classList.remove(elem);
-            if (size !== null)
-                this.htmlBlock.classList.add(size);
+            if (this.size !== null)
+                this.htmlBlock.classList.add(this.size);
         }
         return;
     }
@@ -115,23 +123,22 @@ class ContantSize {
         TODO: the new element wich has get the new  class 'active'
         
         */
-        let activeColor;
         let colors = this.controlFColor();
         let colorActive = colors[0].getElementsByClassName('color_active')[0];
         if (colorActive.getAttribute('data-text-color') === 'black')
-            activeColor = 'book_color-black';
+            this.fontColor = 'book_color-black';
         else if (colorActive.getAttribute('data-text-color') === 'gray')
-            activeColor = 'book_color-gray';
+            this.fontColor = 'book_color-gray';
         else
-            activeColor = 'book_color-whitesmoke';
-        if (this.htmlBlock.classList.contains(activeColor) === false) {
+            this.fontColor = 'book_color-whitesmoke';
+        if (this.htmlBlock.classList.contains(this.fontColor) === false) {
             for (let elem of ['book_color-black', 'book_color-gray', 'book_color-whitesmoke']) {
-                if (activeColor !== elem && this.htmlBlock.classList.contains(elem)) {
+                if (this.fontColor !== elem && this.htmlBlock.classList.contains(elem)) {
                     this.htmlBlock.classList.remove(elem);
                     break;
                 }
             }
-            this.htmlBlock.classList.add(activeColor);
+            this.htmlBlock.classList.add(this.fontColor);
         }
         return;
     }
@@ -180,23 +187,22 @@ class ContantSize {
         TODO: the new element wich has get the new  class 'active'
         
         */
-        let activeBg;
         let backgBlock = this.bakgroundСolor();
         let backgActive = backgBlock[0].getElementsByClassName('color_active')[0];
         if (backgActive.getAttribute('data-bg-color') === 'black')
-            activeBg = 'book_bg-black';
+            this.backgColor = 'book_bg-black';
         else if (backgActive.getAttribute('data-bg-color') === 'gray')
-            activeBg = 'book_bg-gray';
+            this.backgColor = 'book_bg-gray';
         else
-            activeBg = 'book_bg-white';
-        if (this.htmlBlock.classList.contains(activeBg) === false) {
+            this.backgColor = 'book_bg-white';
+        if (this.htmlBlock.classList.contains(this.backgColor) === false) {
             for (let elem of ['book_bg-black', 'book_bg-gray', 'book_bg-white']) {
-                if (activeBg !== elem && this.htmlBlock.classList.contains(elem)) {
+                if (this.backgColor !== elem && this.htmlBlock.classList.contains(elem)) {
                     this.htmlBlock.classList.remove(elem);
                     break;
                 }
             }
-            this.htmlBlock.classList.add(activeBg);
+            this.htmlBlock.classList.add(this.backgColor);
         }
         return;
     }
