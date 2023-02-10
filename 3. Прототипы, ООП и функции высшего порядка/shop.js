@@ -71,7 +71,7 @@ class GoodsList {
 	remove(id) {
 		let i = 0;
 		for (let elem of this.#goods) {
-			if (Number(elem.id) === Number(id)) (this.#goods).splice(i, 1);
+			if (elem.id === id) (this.#goods).splice(i, 1);
 			i++;
 		}
 
@@ -81,7 +81,6 @@ class GoodsList {
 
 
 class BasketGood {
-	// #basket=[];
 	constructor() {
 		this.amount = 0;
 		this.basket = [];
@@ -110,15 +109,14 @@ class Basket extends BasketGood {
 
 	get totalAmounts() {
 		this.totalAmount = this.goods.basket.reduce((sum, item) => {
-			if (item) return Number(sum) + Number(item.quantity);
+			if (item) return sum + item.quantity;
 		}, 0);
 		return this.totalAmount
 	}
 
 	get totalSums() {
 		this.totalSum = this.goods.basket.reduce((sum, item) => {
-			if (item) return Number(sum) + (Number(item.quantity) *
-				Number(item.price));
+			if (item) return sum + item.quantity * item.price;
 		}, 0);
 
 		return this.totalSum
@@ -137,19 +135,18 @@ class Basket extends BasketGood {
 
 	remove(good, amount) {
 		this.#result = (this.goods.basket).filter(item => {
-			if (item) return Number(item.position_id) === Number(
-				good.id)
+			if (item) return item.position_id === good.id
 		});
 
 		for (let i = 0; i < this.goods.basket.length; i++) {
-			if (Number(this.#result[0]['quantity']) <= Number(amount))
+			if (this.#result[0]['quantity'] <= amount)
 				if (this.goods.basket[i].position_id === this.#result[0].position_id)
 					this.goods.basket.splice(i, 1);
 
-			if (Number(this.#result[0]['quantity']) > Number(amount))
+			if (this.#result[0]['quantity'] > amount)
 				if (this.goods.basket[i].position_id === this.#result[0].position_id)
 					this.goods.basket[i].quantity = this.goods.basket[i].quantity -
-						Number(amount);
+						amount;
 		}
 
 		this.#result = [];
