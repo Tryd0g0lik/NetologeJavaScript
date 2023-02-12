@@ -1,26 +1,47 @@
-// Надеюсь предусмотрел случай, когда на странице может одновременно находиться несколько таких кнопок
-const a = document.getElementsByClassName('dropdown__link');
-for (let i = 0; i < a.length; i++)
-	a[i].setAttribute("onclick", 'return false');
-
-
-const cards = document.getElementsByClassName('card');
-const dropdownList = document.getElementsByClassName('dropdown__list');
-
-
-cards[0].addEventListener('click', (e) => {
-	let targets = e.target;
-
-	if (targets.classList.contains('dropdown__value')) dropdownList[0].classList.add('dropdown__list_active');
-	if (targets.classList.contains('dropdown__link')) {
-		document.getElementsByClassName('dropdown__value')[0].innerText = targets.innerText
-		closes();
-	}
-
-
-});
-
-function closes() {
-	// a[0].closest('.dropdown__list').classList.remove('dropdown__list_active');
-	cards[0].firstElementChild.firstElementChild.nextElementSibling.classList.remove('dropdown__list_active');
+const main = document.getElementsByTagName('main');
+class Menu {
+    constructor(main) {
+        this.mains = main;
+    }
+    mathod() {
+        this.mains[0].addEventListener('click', (e) => {
+            if (e.target.classList.contains('dropdown__value')) {
+                let m = document.getElementsByClassName('dropdown__value');
+                for (let i = 0; i < m.length; i++) {
+                    let t = m[i].nextElementSibling.getElementsByClassName('dropdown__link')[0].textContent;
+                    if (m[i].textContent !== t) {
+                        m[i].textContent = t;
+                    }
+                }
+                menu();
+            }
+            if (e.target.classList.contains('dropdown__link')) {
+                submenu();
+            }
+            function menu() {
+                /*
+                    insert and remove the 'dropdown__list_active' class
+                */
+                let parrent = e.target.closest('.content').getElementsByClassName('dropdown__list_active')[0];
+                if (!parrent == false) {
+                    parrent.classList.remove('dropdown__list_active');
+                }
+                let menuList = e.target.nextElementSibling;
+                menuList.classList.add('dropdown__list_active');
+            }
+            function submenu() {
+                /*
+                    the title menu is reset
+                */
+                let text = e.target.innerText;
+                console.log(e.target.closest('.dropdown').firstElementChild.innerText);
+                e.target.closest('.dropdown').firstElementChild.innerText = text;
+            }
+        });
+    }
 }
+main[0].addEventListener('click', (e) => {
+    e.preventDefault();
+});
+let car = new Menu(main);
+car.mathod();
