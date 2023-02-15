@@ -89,26 +89,21 @@ class Basket {
 
 	get totalSums() {
 		let count = 0;
-		this.totalAmount = this.goods.reduce((sum, item) => {
+		return this.goods.reduce((sum, item) => {
 			count = sum + item.amount;
 
 			return count
 		}, 0);
 
-		let totalAmount = this.totalAmount;
-		return totalAmount
 	}
 
 	get totalAmounts() {
 		let count = 0;
-		this.totalSum = this.goods.reduce((sum, item) => {
+		return this.goods.reduce((sum, item) => {
 			count = sum + item.amount * item.price;
 
 			return count
 		}, 0);
-
-		let totalSum = this.totalSum;
-		return totalSum
 	}
 
 	add(good, amount) {
