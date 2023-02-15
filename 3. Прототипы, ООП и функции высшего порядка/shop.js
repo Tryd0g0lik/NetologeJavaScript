@@ -11,7 +11,7 @@ class Good {
 
 	setAvailable(value = false) { // изменение признака доступности для продажи
 		this.available = value;
-		return value
+
 	}
 }
 
@@ -22,49 +22,42 @@ class GoodsList {
 		this.sortPrice = sortPrice;
 		this.sortDir = sortDir;
 		this.#goods = dataList;
+		this.filterTitle = new RegExp(/(^([[А-Яа-яa-z0-9]+) ?([А-Яа-яa-z0-9])*\S?\s?([а-яa-z0-9]+)* ?([-_ ])? ?[а-яa-z0-9]*[а-яa-z0-9$]?)/);
 	}
 
 	get list() {
-		let filterTitle = new RegExp(
-			/(^([[А-Яа-яa-z0-9]+) ?([А-Яа-яa-z0-9])*\S?\s?([а-яa-z0-9]+)* ?([-_ ])? ?[а-яa-z0-9]*[а-яa-z0-9$]?)/
-		);
+		let arrSortDirNull = this.#goods.filter(item => !item.sortDir)
 
 		if (this.sortPrice) {
 			if (!this.sortDir) {
-				this.#goods.sort((a, b) => {
-					if ((filterTitle).test(a.title) && (filterTitle)
-						.test(b.title)) {
-						if (parseInt(a.price) < parseInt(b.price))
-							return 1;
-						if (parseInt(a.price) === parseInt(b.price))
-							return 0;
-						if (parseInt(a.price) > parseInt(b.price))
-							return -1;
+				arrSortDirNull.sort((a, b) => {
+
+					if ((this.filterTitle).test(a.title) && (this.filterTitle).test(b.title)) {
+						if (a.price < b.price) return 1;
+						if (a.price === b.price) return 0;
+						if (a.price > b.price) return -1;
 					}
 				});
 			}
 
 			if (this.sortDir) {
-				this.#goods.sort((a, b) => {
-					if ((filterTitle).test(a.title) && (filterTitle)
-						.test(b.title)) {
-						if (parseInt(a.price) > parseInt(b.price))
-							return 1;
-						if (parseInt(a.price) === parseInt(b.price))
-							return 0;
-						if (parseInt(a.price) < parseInt(b.price))
-							return -1;
+				arrSortDirNull.sort((a, b) => {
+
+					if ((this.filterTitle).test(a.title) && (this.filterTitle).test(b.title)) {
+						if (a.price < b.price) return -1;
+						if (a.price === b.price) return 0;
+						if (a.price > b.price) return 1;
 					}
 				});
 			}
 		}
 
-		return this.#goods
+		return arrSortDirNull
 	}
 
 	add(val) {
 		(this.#goods).push(val);
-		return this
+
 	}
 
 	remove(id) {
@@ -74,7 +67,8 @@ class GoodsList {
 			i++;
 		}
 
-		return this.#goods
+		let _goods = this.#goods
+		return _goods
 	}
 }
 
@@ -93,20 +87,28 @@ class Basket {
 		this.goods = goods; //Array[]
 	}
 
-	get totalAmounts() {
+	get totalSums() {
+		let count = 0;
 		this.totalAmount = this.goods.reduce((sum, item) => {
-			if (item) return sum + item.amount;
+			count = sum + item.amount;
+
+			return count
 		}, 0);
 
-		return this.totalAmount
+		let totalAmount = this.totalAmount;
+		return totalAmount
 	}
 
-	get totalSums() {
+	get totalAmounts() {
+		let count = 0;
 		this.totalSum = this.goods.reduce((sum, item) => {
-			if (item) return sum + item.amount * item.price;
+			count = sum + item.amount * item.price;
+
+			return count
 		}, 0);
 
-		return this.totalSum
+		let totalSum = this.totalSum;
+		return totalSum
 	}
 
 	add(good, amount) {
@@ -115,7 +117,8 @@ class Basket {
 		if (i < 0) { this.goods.push(new BasketGood(good, amount)); }
 		if (i >= 0) { this.goods[i].amount + amount }
 
-		return this.goods;
+		let goods = this.goods
+		return goods;
 	}
 
 	remove(good, amount) {
@@ -126,17 +129,20 @@ class Basket {
 				if (this.goods[i].amount <= 0) { this.goods.splice(i, 1) }
 			}
 		}
-		return this.goods;
+
+		let goods = this.goods;
+		return goods;
 	}
 
 	clear() {
-		return this.goods.basket = []
+		this.goods.basket = []
 	}
 
 	removeUnavailable() {
 		this.goods = this.goods.filter(item => item.available === true);
 
-		return this.goods
+		let goods = this.goods
+		return goods
 	}
 }
 
@@ -150,7 +156,7 @@ console.log(winter, winter2, winter3)
 
 console.log("-----------------")
 console.log("----GoodsList----")
-let goodsList = new GoodsList([winter, winter2, winter3,], true, false);
+let goodsList = new GoodsList([winter, winter2, winter3,], true, true);
 
 goodsList.add(new Good(4, "tunic", "TU-TU-|TU", 34, 4030, false));
 
