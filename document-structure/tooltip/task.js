@@ -9,7 +9,6 @@ function popUp(elemList) {
             // В последствии reference, прошеддший фильтр лишиается свойств браузера по умолчанию при клике.
             elem.insertAdjacentHTML('afterend', `<div class="tooltip" style="left: 0; top: 0;">
       ${titles}</div> `); // Делаем подсказку.
-            elem.setAttribute("onclick", "event.preventDefault()");
             elem.removeAttribute('title');
         }
         let nextElem = elem.nextElementSibling;
@@ -19,14 +18,10 @@ function popUp(elemList) {
                 nextElem.setAttribute("style", `left: ${elem.getBoundingClientRect().left}px; top: ${elem.getBoundingClientRect().top + 15}px;`);
             }
         });
-        elem.addEventListener('mouseup', (e) => {
+        elem.addEventListener('click', (e) => {
+            e.preventDefault();
             if (nextElem.classList.value.includes('tooltip')) {
-                nextElem.classList.remove('tooltip_active');
-            }
-        });
-        elem.addEventListener('mousedown', (e) => {
-            if (nextElem.classList.value.includes('tooltip')) { // Визуализация подсказки по клику.
-                nextElem.classList.add('tooltip_active');
+                nextElem.classList.toggle('tooltip_active');
             }
         });
     }

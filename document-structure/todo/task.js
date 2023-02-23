@@ -1,5 +1,5 @@
 const inp = document.getElementById('tasks');
-let massegPlan = '';
+let massagPlan = '';
 inp.addEventListener('click', e => {
     e.preventDefault();
     let targets = e.target;
@@ -7,14 +7,14 @@ inp.addEventListener('click', e => {
     let lines = getElementId();
     /* there is adding massegs of a plan - start*/
     if (targets.classList.value.includes('tasks__add') && ine().length > 0 && ine() !== " ") {
-        localStorage.setItem(`plan_${lines.length + 1}`, ine().trim());
-        massegPlan += `<div class="task" id="plan_${lines.length + 1}">
+        // localStorage.setItem(`plan_${lines.length + 1}`, ine().trim());
+        massagPlan += `<div class="task" id="plan_${lines.length + 1}">
 		<div class="task__title">
 			${ine().trim()}
 		</div>
 		<a href="#" class="task__remove">&times;</a>
 	</div>`;
-        taskList.innerHTML = massegPlan;
+        taskList.innerHTML = massagPlan;
         ine(true);
         /* there is adding massegs of a plan - end*/
     }
@@ -23,7 +23,7 @@ inp.addEventListener('click', e => {
         let lineId = lineOfPlan.getAttribute('id');
         lineOfPlan.remove();
         lines = getElementId();
-        localStorage.removeItem(lineId);
+        // localStorage.removeItem(lineId);
         linesList(lines);
         // localStorage.removeItem(`plan_${lines.length}`); 
     }
@@ -32,17 +32,17 @@ inp.addEventListener('click', e => {
     }
     async function linesList(obj) {
         let plans = '';
-        massegPlan = '';
+        massagPlan = '';
         for (let elem of obj) {
             plans += String(elem.outerHTML);
         }
-        massegPlan = plans;
+        massagPlan = plans;
     }
 });
 function ine(varieblString = false) {
     const inputElem = document.getElementById('task__input');
     if (varieblString === false) { // her is get the masseg of input form.
-        if (inputElem.value.length > 0) {
+        if (inputElem.value.trim().length > 0) {
             return inputElem.value;
         }
     }
