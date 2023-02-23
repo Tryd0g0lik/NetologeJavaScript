@@ -85,7 +85,6 @@ function htmlButton(lists) {
 }
 const rPost = new PostAnswers();
 requestMethod = rPost.requestOfPost();
-2891212;
 const requestPost = new XMLHttpRequest();
 // let params: {vote: string, answer: number} = {
 //     vote: 'poll__title',

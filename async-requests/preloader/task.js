@@ -41,11 +41,9 @@ class MethodGet extends Https {
     }
     __getHtmlcData() {
         if (!!this.server) {
-            console.log('this.server: ', this.server);
-            console.log("-------");
             let jsn = JSON.parse(this.server);
             let elem = Array.from([jsn.response.Valute]);
-            console.log("elem: ", elem);
+
             for (let i = 0; i < elem.length; i++) {
                 for (let r in elem[i]) {
                     __classPrivateFieldSet(this, _MethodGet_items, __classPrivateFieldGet(this, _MethodGet_items, "f") + `<div class="item__code">
@@ -67,7 +65,7 @@ class MethodGet extends Https {
             let items = document.getElementById('items');
             let item = items.getElementsByClassName('item');
             let html = Array.from([__classPrivateFieldGet(this, _MethodGet_items, "f")]);
-            console.log('html: ', html[0]);
+
             item[0].innerHTML = html[0];
         }
     }
