@@ -36,10 +36,12 @@ class Http {
                 console.log(this.request.readyState);
                 console.log("2: ", file.value);
                 console.log(event.lengthComputable);
+
                 if (this.request.readyState === 2 && event.lengthComputable) {
                     let f = event.loaded;
                     console.log("event.loaded: ", event.loaded);
                     progr.value = f;
+
                     console.log(`Отправлено ${event.loaded} из ${event.total}`);
                     console.log((event.loaded / event.total) * 100);
                     if (event.loaded === event.total) {
