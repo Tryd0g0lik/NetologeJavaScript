@@ -15,8 +15,12 @@ node_modules/
 1.4. Обработка ошибок, замыкания и асинхронность/
 **/package-lock.json
 /gulp-*
+/gulp/node_*
 **/index.html 
 
 **/map
 **/*.map
 **/popup/client-state
+
+!gulp-auth/src
+!gulp-auth/*
