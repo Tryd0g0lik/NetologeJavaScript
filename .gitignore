@@ -18,4 +18,5 @@ node_modules/
 **/index.html 
 
 **/map
+**/*.map
 **/popup/client-state
