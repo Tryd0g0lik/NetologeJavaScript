@@ -1,9 +1,9 @@
-.gitignore
+
 .env
 
 **/.idea
 *arhive
-node_modules/
+**/node_modules
 **/test.js
 
 **/package-lock.json/
@@ -14,15 +14,15 @@ node_modules/
 1.3_ООП_и_функции/
 1.4. Обработка ошибок, замыкания и асинхронность/
 **/package-lock.json
-/gulp-*
 
-!gulp-auth/src
-!gulp-auth/*
 
-/gulp/node_*
+!**/gulp-auth/src
+!**/gulp-auth/*
+**/gulp-*
+
 **/index.html 
 
 **/map
-**/*.map
+!./client-state/*/*.map
 **/popup/client-state
 
