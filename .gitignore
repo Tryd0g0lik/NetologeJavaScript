@@ -19,11 +19,14 @@
 
 # !**/gulp-auth/src
 !**/gulp-auth
+!**/gulp-popup
+!gulp-text-editor
 
 
 **/index.html 
 
 **/map
+
 !./client-state/*/*.map
 **/popup/client-state
 
