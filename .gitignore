@@ -15,10 +15,11 @@
 1.4. Обработка ошибок, замыкания и асинхронность/
 **/package-lock.json
 
-
-!**/gulp-auth/src
-!**/gulp-auth/*
 **/gulp-*
+
+# !**/gulp-auth/src
+!**/gulp-auth
+
 
 **/index.html 
 
