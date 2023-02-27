@@ -1,8 +1,8 @@
 const formElement = document.getElementById('signin__form');
 const formButton = document.getElementById('signin__btn');
 const formInputField = formElement.getElementsByTagName('input');
-
 class User {
+    // общие св-ва
     logins;
     passwords;
     constructor(userName, userPasswords) {
@@ -10,29 +10,26 @@ class User {
         this.passwords = userPasswords;
     }
 }
-
 class UserData extends User {
-
+    formId;
     constructor(logins, passwords) {
         super(logins, passwords);
     }
-
     saveLogPass() {
         try {
             localStorage.setItem("UserOuth", JSON.stringify({ 'login': this.logins, 'passwords': this.passwords }));
-        }        
+        }
         catch (e) {
             let errors;
             errors = `ERROR message: ${e.message}`;
             formElement.insertAdjacentHTML('beforeend', `<p>${errors}</p>`);
         }
     }
-
+    //встановить Login / password в форме
     restoreLogPass() {
         const dt = localStorage.getItem('UserOuth');
         let pass;
         let log;
-
         try {
             if (!!dt && dt !== "{}") {
                 log = JSON.parse(dt)['login'];
@@ -40,7 +37,6 @@ class UserData extends User {
                 if (log && pass)
                     return [log, pass];
             }
-
             return [];
         }
         catch (e) {
@@ -49,20 +45,18 @@ class UserData extends User {
             formElement.insertAdjacentHTML('beforeend', `<p>${errors}</p>`);
         }
     }
+    // Запрос на сервер
     http() {
         let http;
         try {
             if (window.XMLHttpRequest) {
                 http = new XMLHttpRequest();
             }
-
             else if (window.ActiveXObject) {
                 http = new ActiveXObject("Microsoft.XMLHTTP");
             }
-
             http.open('POST', 'https://students.netoservices.ru/nestjs-backend/auth', true);
             http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
             let log = this.logins;
             let pass = this.passwords;
             http.addEventListener("readystatechange", (e) => {
@@ -72,7 +66,6 @@ class UserData extends User {
                     console.log(http.responseText);
                 }
             });
-
             http.send(`login=${log}&password=${pass}`);
         }
         catch (e) {
@@ -82,7 +75,6 @@ class UserData extends User {
         }
     }
 }
-
 window.onload = () => {
     let arrField;
     try {
@@ -90,39 +82,41 @@ window.onload = () => {
             let pass;
             let login;
             let localSaveData;
-
             arrField = Array.from(formInputField).filter(item => item ?
                 item.hasAttribute('name') &&
                     item.getAttribute('name') === 'login' ||
                     item.getAttribute('name') === 'password' : false);
-
+            // нажимаем на button
             formButton.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (arrField.length >= 2) { // проверка кол-ва полей
+                // проверка кол-ва полей
+                if (arrField.length >= 2) {
                     for (let elem of arrField) {
+                        // Проверка предназназначения поля
                         let el = elem;
-
-                        if (el.name === "login") { // Проверка предназназначения поля
+                        if (el.name === "login") {
                             login = el.value.trim();
                         }
                         ;
-
                         if (el.name === "password") {
-                            pass = el.value.trim();                            
+                            pass = el.value.trim();
                         }
                         ;
-
-                        if (el.value.trim(), el.value.trim()) { // Если все is very a good, тогда запускаем запрос на сервер
+                        // Если все is very a good, тогда запускаем запрос на сервер
+                        if (el.value.trim(), el.value.trim()) {
                             let UserAutorisation = new UserData(el.value.trim(), el.value.trim());
-                            UserAutorisation.http(); // запрос на сервер
-                            el.value = null; // Обнуляем поле
+                            // запрос на сервер
+                            UserAutorisation.http();
+                            // Обнуляем поле
+                            el.value = null;
                         }
                     }
-
                     // Проверка кол-ва символов в поле
                     if (login.trim().length > 3 && pass.trim().length > 3) {
-                        localSaveData = new UserData(login, pass); // Отправляем данные формы
-                        localSaveData.saveLogPass(); // Сохранение даных в localStorage
+                        // Отправляем данные формы
+                        localSaveData = new UserData(login, pass);
+                        // Сохранение даных в localStorage
+                        localSaveData.saveLogPass();
                     }
                     else {
                         formElement.insertAdjacentHTML('beforeend', `<p style="color:red;"> Логин и пароль допускаются от 3-х символов<p>`);
@@ -130,15 +124,14 @@ window.onload = () => {
                     ;
                 }
             });
-
             // Востановление данных если они есть в localStorage
-            localSaveData = new UserData(login, pass); // Отправляем пустую форму
-            let loginPass = localSaveData.restoreLogPass(); // Востановление локальных данных
-
+            // Отправляем пустую форму
+            localSaveData = new UserData(login, pass);
+            // Востановление локальных данных
+            let loginPass = localSaveData.restoreLogPass();
             if ((loginPass).length === 2) {
                 for (let elem of arrField) {
                     let el = elem;
-
                     if (el.name === "login")
                         el.value = loginPass[0];
                     if (el.name === "password")
@@ -150,9 +143,7 @@ window.onload = () => {
     catch (e) {
         console.log(`ERROR: ${e.message} // ${e.stack}`);
     }
-};
-
-//В момент, когда пользователь нажимает на кнопку #signin__btn, необходимо направить AJAX-запрос
+}; //В момент, когда пользователь нажимает на кнопку #signin__btn, необходимо направить AJAX-запрос
 function formAuthoris() {
     let elem = formElement.closest(".signin");
     elem.classList.toggle('signin_active');
