@@ -1,3 +1,4 @@
+.idea
 node_modules
 gulp-*
 **/index.*
@@ -8,3 +9,5 @@ gulp-*
 
 !gulp-preloader
 !gulp-*/*/*/index.*
+
+./*.json
