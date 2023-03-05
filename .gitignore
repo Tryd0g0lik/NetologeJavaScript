@@ -9,5 +9,3 @@ gulp-*
 
 !gulp-preloader
 !gulp-*/*/*/index.*
-
-./*.json
