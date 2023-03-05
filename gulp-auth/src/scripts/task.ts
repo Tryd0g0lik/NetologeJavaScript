@@ -1,5 +1,7 @@
 const formElement = <HTMLFormElement>document.getElementById('signin__form');
 const formButton = <HTMLElement>document.getElementById('signin__btn');
+const welcome = <HTMLElement>document.getElementById('welcome');
+const user_id = <HTMLElement>document.getElementById('user_id');
 const formInputField = <HTMLCollection>formElement.getElementsByTagName('input');
 
 class User {
@@ -19,43 +21,9 @@ class UserData extends User {
 
   }
 
-  saveLogPass() {
-    try {
-      localStorage.setItem("UserOuth",
-        JSON.stringify({ 'login': this.logins, 'passwords': this.passwords }))
 
-    } catch (e) {
-      let errors!: string;
-      errors = <string>`ERROR message: ${e.message}`;
-      formElement.insertAdjacentHTML('beforeend', `<p>${errors}</p>`);
-
-    }
-  }
 
   //встановить Login / password в форме
-  restoreLogPass() {
-    const dt = localStorage.getItem('UserOuth')
-    let pass: string;
-    let log: string
-
-    try {
-      if (!!dt && dt !== "{}") {
-        log = JSON.parse(dt)['login'];
-        pass = JSON.parse(dt)['passwords'];
-
-        if (log && pass) return [log, pass]
-      }
-
-      return []
-    } catch (e) {
-      let errors!: string;
-      errors = <string>`ERROR message: ${e.message}`;
-      formElement.insertAdjacentHTML('beforeend', `<p>${errors}</p>`);
-
-    }
-
-  }
-
   // Запрос на сервер
   http() {
 
@@ -70,23 +38,28 @@ class UserData extends User {
 
       http.open('POST', 'https://students.netoservices.ru/nestjs-backend/auth', true);
       http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      let log = this.logins;
+      let login = this.logins;
       let pass = this.passwords;
 
       http.addEventListener("readystatechange", (e) => {
 
         if (http.readyState === http.DONE) {
-          console.log(http.status)
-          console.log(http.statusText)
-          console.log(http.responseText)
+          console.log("http.status: ", http.status)
+          console.log("http.statusText: ", http.statusText)
+          console.log("http.responseText: ", http.responseText)
+          if (http.status === 201) {
+            user_id.innerHTML = login;
+            welcome.classList.add('welcome_active')
+          }
         }
       })
 
-      http.send(`login=${log}&password=${pass}`);
+      http.send(`login=${login}&password=${pass}`);
 
     } catch (e) {
       let errors!: string;
       errors = <string>`ERROR message: ${e.message}`;
+
       formElement.insertAdjacentHTML('beforeend', `<p>${errors}</p>`);
 
     }
@@ -102,7 +75,6 @@ window.onload = () => {
     if (!!formElement) {
       let pass: string;
       let login: string;
-      let localSaveData;
 
       arrField = <HTMLElement[]>Array.from(formInputField).filter(item => item ?
         item.hasAttribute('name') &&
@@ -121,19 +93,21 @@ window.onload = () => {
 
             // Проверка предназназначения поля
             let el = <HTMLInputElement>elem;
-            if (el.name === "login") {
+            if (el.name === "login" && el.value.length > 3) {
               login = el.value.trim();
 
             };
 
-            if (el.name === "password") {
+            if (el.name === "password" && el.value.length > 3) {
               pass = el.value.trim();
 
 
             };
 
             // Если все is very a good, тогда запускаем запрос на сервер
-            if (el.value.trim(), el.value.trim()) {
+
+            if (el.value.trim() && el.value.trim()) {
+
               let UserAutorisation = new UserData(el.value.trim(), el.value.trim());
               // запрос на сервер
               UserAutorisation.http()
@@ -142,35 +116,10 @@ window.onload = () => {
 
             }
           }
-
-          // Проверка кол-ва символов в поле
-          if (login.trim().length > 3 && pass.trim().length > 3) {
-            // Отправляем данные формы
-            localSaveData = new UserData(login, pass);
-            // Сохранение даных в localStorage
-            localSaveData.saveLogPass();
-          } else {
-            formElement.insertAdjacentHTML('beforeend',
-              `<p style="color:red;"> Логин и пароль допускаются от 3-х символов<p>`);
-
-          };
         }
       });
 
-      // Востановление данных если они есть в localStorage
-      // Отправляем пустую форму
-      localSaveData = new UserData(login, pass);
-      // Востановление локальных данных
-      let loginPass = localSaveData.restoreLogPass();
 
-      if ((loginPass).length === 2) {
-        for (let elem of arrField) {
-          let el = <HTMLInputElement>elem;
-          if (el.name === "login") el.value = loginPass[0];
-          if (el.name === "password") el.value = loginPass[1];
-
-        }
-      }
     }
   } catch (e) {
 

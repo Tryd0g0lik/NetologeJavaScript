@@ -15,11 +15,11 @@
 1.4. Обработка ошибок, замыкания и асинхронность/
 
 
-**/gulp-*
+gulp-*
 
 # !**/gulp-auth/src
-!**/gulp-auth
-!**/gulp-popup
+!gulp-auth
+!gulp-popup
 !gulp-text-editor
 
 
