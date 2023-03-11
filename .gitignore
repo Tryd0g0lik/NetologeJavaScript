@@ -3,9 +3,3 @@ node_modules
 gulp-*
 **/index.*
 
-!gulp-progressbar
-
-!gulp-poll
-
-!gulp-preloader
-!gulp-*/*/*/index.*
