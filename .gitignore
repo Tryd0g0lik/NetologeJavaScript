@@ -1,6 +1,7 @@
 .idea
 node_modules
 gulp-*
-**/index.*
+**/gulp-*/index.*
 
 
+ajs-homeworks
