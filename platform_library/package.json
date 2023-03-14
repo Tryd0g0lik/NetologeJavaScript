@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
-    "publishConfig": {
-      "registry": "https://npm.pkg.github.com/"
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
     },
   "scripts": {
     "build": "webpack --mode production",
@@ -22,9 +22,5 @@
     "@babel/preset-env": "^7.20.2",
     "babel-loader": "^9.1.2",
     "webpack-cli": "^5.0.1"
-  },
-  "bugs": {
-    "url": "https://github.com/Tryd0g0lik/testDelete/issues"
-  },
-  "homepage": "https://github.com/Tryd0g0lik/testDelete#readme"
+  }
 }
