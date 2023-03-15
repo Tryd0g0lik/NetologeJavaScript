@@ -22,7 +22,6 @@ module.exports = {
 
       filename: 'main.html',
       template: path.resolve(__dirname, './src/html/index.html'),
-      base: "https://example.com/",
       title: 'firstApp_Webpack',
 
     }),

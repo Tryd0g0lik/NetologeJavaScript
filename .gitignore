@@ -1,7 +1,7 @@
 .idea
-node_modules
+
 gulp-*
 **/gulp-*/index.*
 
-
+**/node_*
 ajs-homeworks
