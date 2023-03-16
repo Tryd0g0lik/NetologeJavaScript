@@ -1,5 +1,7 @@
 .idea
 node_modules
+platform_package
+
 gulp-*
 **/gulp-*/index.*
 platform_library/index.txt

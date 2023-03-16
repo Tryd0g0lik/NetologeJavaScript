@@ -1,8 +1,8 @@
 {
   "name": "@tryd0g0lik/netologejavascript",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production"
@@ -16,18 +16,16 @@
   "bugs": {
     "url": "https://github.com/Tryd0g0lik/NetologeJavaScript/issues"
   },
-  
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
   "homepage": "https://github.com/Tryd0g0lik/NetologeJavaScript#readme",
   "devDependencies": {
     "@babel/cli": "^7.21.0",
-    "@babel/core": "^7.21.0",
+    "@babel/core": "^7.21.3",
     "@babel/preset-env": "^7.20.2",
     "babel-loader": "^9.1.2",
-    "webpack": "^5.76.1",
+    "webpack": "^5.76.2",
     "webpack-cli": "^5.0.1"
   }
-  
 }
