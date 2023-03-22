@@ -22,6 +22,7 @@
       "LabeledStatement",
       "WithStatement"
     ],
+    
     "no-multiple-empty-lines": [
       "error",
       {
