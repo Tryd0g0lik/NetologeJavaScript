@@ -22,4 +22,3 @@ after_build: # скрипт после сборки
 test_script:
   - npm run lint && npm test  # скрипт тестирования
 18
-12-13 408
