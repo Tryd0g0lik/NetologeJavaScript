@@ -13,10 +13,7 @@
     "sourceType": "module"
   },
   "rules": {
-    "linebreak-style": [
-      "error",
-      "windows"
-    ],
+    "validateLineBreaks": "LF",
     "no-restricted-syntax": [
       "error",
       "LabeledStatement",
