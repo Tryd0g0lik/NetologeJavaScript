@@ -5,7 +5,7 @@ stack: node 18  # окружение
 branches:
   only:
     - task5_4  # ветка git
-
+clone_folder: E:\Netologe\NetologeJavaScript\ci-template
 cache: node_modules  # кеширование
 
 install:
