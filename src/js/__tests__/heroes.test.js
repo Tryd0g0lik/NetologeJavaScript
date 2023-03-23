@@ -1,4 +1,4 @@
-import { Hero } from "../heroes";
+import { Hero } from "../heroes.js";
 
 const heroList = test.each([
   ["healthy 49 False", { name: 'Маг1', health: 49 }, "healthy"],
@@ -18,7 +18,7 @@ const heroList = test.each([
   ["critical 1 True", { name: 'Маг5', health: 1 }, "critical"]
 ]);
 
-heroList('test the healtly statuses wich has been equal ==> "%s"', async (a, b, expected) => {
+heroList('test the healtly statuses wich has been equal ==> "%s"', async function (a, b, expected) {
   const testHeroes = await new Hero(b);
   const healtly = await testHeroes.statusHealtly;
   expect(healtly).toBe(expected);

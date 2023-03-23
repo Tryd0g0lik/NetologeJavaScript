@@ -15,12 +15,3 @@ test('should call loadUser once', () => {
   expect(response).toEqual({});
   expect(httpGet).toBeCalledWith('http://server:8080/users/1');
 });
-
-
-
-
-
-
-
-
-

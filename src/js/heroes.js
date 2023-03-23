@@ -1,5 +1,4 @@
-export class Hero {
-
+export default class Hero {
   constructor(hero) {
     this.name = hero.name;
     this.health = hero.health;
@@ -18,3 +17,4 @@ export class Hero {
     return healthyHero;
   }
 }
+
