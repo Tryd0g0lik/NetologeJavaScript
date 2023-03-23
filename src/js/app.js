@@ -1,6 +1,6 @@
 // TODO: write your code here;
 
-import Hero from './basic.js';
+import { Hero } from './basic.js';
 
 
 // console.log('worked'); `
