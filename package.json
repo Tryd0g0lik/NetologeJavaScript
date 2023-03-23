@@ -39,6 +39,5 @@
     "core-js": "^3.29.1"
   },
   "description": "",
-  "sourceType": "scripte",
-  "type": "module"
+  "sourceType": "scripte"
 }
