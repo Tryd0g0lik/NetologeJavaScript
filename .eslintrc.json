@@ -15,7 +15,7 @@
   "rules": {
     "linebreak-style": [
       "error",
-      "LF"
+      "windows"
     ],
     "no-restricted-syntax": [
       "error",
