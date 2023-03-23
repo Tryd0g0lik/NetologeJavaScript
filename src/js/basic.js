@@ -16,8 +16,8 @@ export class Hero {
   get statusHealtly() {
     let healthyHero = '';
     if (this.health > 50) {
-      healthyHero = 'healthy';
-    } elsif (this.health >= 15 && this.healyh <= 50){
+      healthyHero = 'healthy'; 
+    } else if (this.health >= 15 && this.healyh <= 50){
       healthyHero = 'wounded';
     } else {
       healthyHero = 'critical';
