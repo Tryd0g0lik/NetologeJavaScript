@@ -1,6 +1,11 @@
 // TODO: write your code here;
-import sum from './basic';
+import Hero from './basic.js';
 
-console.log('worked');
+// console.log('worked'); `
 
-console.log(sum([1, 2]));
+// console.log(sum([1, 2]));`
+
+let hero = { name: 'Маг', health: 30 };
+
+const heroes = new Hero(hero);
+console.log(heroes.statusHealtly);
